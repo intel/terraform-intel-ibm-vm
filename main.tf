@@ -48,12 +48,18 @@ resource "ibm_is_instance" "instance" {
   name         = var.instance_name #random numbers?
   image        = var.image_name #OS and version
   profile      = var.profile_name #Instance size, will need policy checks
+}
+
+resource "ibm_is_instance" "instance" {
+  name         = var.instance_name
+  image        = var.image_name
+  profile      = var.profile_name
   vpc          = ibm_is_vpc.vpc.id
   zone         = var.zone
   keys         = [ibm_is_ssh_key.ssh_key.id]
-
-  
+ 
   # Flesh the network interface and primary_network_interface sections
+
   primary_network_interface {
     subnet                = ibm_is_subnet.subnet.id
     allow_ip_spoofing     = false
