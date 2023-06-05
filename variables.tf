@@ -74,16 +74,6 @@ variable "port_max" {
   default     = 22
 }
 
-# variable "icmp_type" {
-#   description = "(Optional) The ICMP type for remote access."
-#   default     = null
-# }
-
-# variable "icmp_code" {
-#   description = "(Optional) The ICMP code for remote access."
-#   default     = null
-# }
-
 variable "ssh_key_name" {
   type        = string
   description = "The name of the SSH key."
@@ -105,6 +95,7 @@ variable "image_name" {
   type        = string
   description = "The name of the image."
   default     = "r006-c2c24ac1-b03d-4427-85cf-92e95d4aa658"
+  #Look this up from the CLI
 }
 
 variable "profile_name" {
@@ -113,9 +104,6 @@ variable "profile_name" {
   default     = "bx2-2x8"
 }
 
-# variable "ip_address" {
-#   description = "(Optional) The IP address for the instance."
-# }
 
 ########################
 ####     Other      ####
