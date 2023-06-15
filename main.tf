@@ -1,73 +1,123 @@
-provider "ibm" {
-  region     = var.region
+data "ibm_is_image" "image" {
+  name = var.image_name
 }
 
-resource "ibm_is_vpc" "vpc" {
-  name = var.vpc_name
-  ## Need to determine if this needs to be looked up or created new or something else
+data "ibm_is_subnet" "subnet" {
+  identifier = var.subnet_id
 }
 
-resource "ibm_is_subnet" "subnet" {
-  name            = var.subnet_name
-  vpc             = ibm_is_vpc.vpc.id
-  zone            = var.zone
-  ipv4_cidr_block = var.ipv4_cidr_block
-  ## Need to determine what ranges are valid for VPC instance
-  ## Need to validate that we can reuse an existing range
+resource "ibm_is_security_group" "bastion" {
+  name           = "${var.name}-group"
+  vpc            = var.vpc_id
+  resource_group = var.resource_group_id
 }
 
-resource "ibm_is_ssh_key" "ssh_key" {
-  name        = var.ssh_key_name
-  public_key  = var.ssh_key_public
-  ## Find a better way
-  ## https://www.netexpertise.eu/en/devops/terraform/terraform-shared-resources-ssh-keys-case-study.html
-}
-
-resource "ibm_is_security_group" "security_group" {
-  name        = var.security_group_name
-  vpc         = ibm_is_vpc.vpc.id
-#  description = var.security_group_description
-## Flesh this one out and figure out valid values?
-}
-
-resource "ibm_is_security_group_rule" "security_group_rule" {
-  group   = ibm_is_security_group.security_group.id
-  direction     = "inbound"
-  remote        = var.remote_ip_prefix
-  depends_on    = [ibm_is_security_group.security_group]
-  
+resource "ibm_is_security_group_rule" "ssh_inbound" {
+  group     = ibm_is_security_group.bastion.id
+  direction = "inbound"
+  remote    = var.allow_ssh_from
   tcp {
-    port_min      = var.port_min
-    port_max      = var.port_max
+    port_min = 22
+    port_max = 22
   }
-  ## Flesh this one out and figure out valid values
-  ## What settings should be used in the provider version we are targeting?
 }
 
-resource "ibm_is_instance" "instance" {
-  name         = var.instance_name #random numbers?
-  image        = var.image_name #OS and version
-  profile      = var.profile_name #Instance size, will need policy checks
+resource "ibm_is_security_group_rule" "ssh_to_host_in_maintenance" {
+  group     = ibm_is_security_group.bastion.id
+  direction = "outbound"
+  remote    = ibm_is_security_group.maintenance.id
+  tcp {
+    port_min = 22
+    port_max = 22
+  }
 }
 
-resource "ibm_is_instance" "instance" {
-  name         = var.instance_name
-  image        = var.image_name
-  profile      = var.profile_name
-  vpc          = ibm_is_vpc.vpc.id
-  zone         = var.zone
-  keys         = [ibm_is_ssh_key.ssh_key.id]
- 
-  # Flesh the network interface and primary_network_interface sections
+resource "ibm_is_security_group_rule" "ssh_to_self_public_ip" {
+  count = var.create_public_ip ? 1 : 0
+
+  group     = ibm_is_security_group.bastion.id
+  direction = "outbound"
+  remote    = ibm_is_floating_ip.bastion[0].address
+  tcp {
+    port_min = 22
+    port_max = 22
+  }
+}
+
+resource "ibm_is_security_group_rule" "additional_all_rules" {
+  for_each = {
+    for rule in var.security_group_rules : rule.name => rule if lookup(rule, "tcp", null) == null && lookup(rule, "udp", null) == null && lookup(rule, "icmp", null) == null
+  }
+  group      = ibm_is_security_group.bastion.id
+  direction  = each.value.direction
+  remote     = each.value.remote
+  ip_version = lookup(each.value, "ip_version", null)
+}
+
+resource "ibm_is_security_group_rule" "additional_tcp_rules" {
+  for_each = {
+    for rule in var.security_group_rules : rule.name => rule if lookup(rule, "tcp", null) != null
+  }
+  group      = ibm_is_security_group.bastion.id
+  direction  = each.value.direction
+  remote     = each.value.remote
+  ip_version = lookup(each.value, "ip_version", null)
+
+  tcp {
+    port_min = each.value.tcp.port_min
+    port_max = each.value.tcp.port_max
+  }
+}
+
+resource "ibm_is_security_group_rule" "additional_udp_rules" {
+  for_each = {
+    for rule in var.security_group_rules : rule.name => rule if lookup(rule, "udp", null) != null
+  }
+  group      = ibm_is_security_group.bastion.id
+  direction  = each.value.direction
+  remote     = each.value.remote
+  ip_version = lookup(each.value, "ip_version", null)
+
+  udp {
+    port_min = each.value.udp.port_min
+    port_max = each.value.udp.port_max
+  }
+}
+
+resource "ibm_is_security_group_rule" "additional_icmp_rules" {
+  for_each = {
+    for rule in var.security_group_rules : rule.name => rule if lookup(rule, "icmp", null) != null
+  }
+  group      = ibm_is_security_group.bastion.id
+  direction  = each.value.direction
+  remote     = each.value.remote
+  ip_version = lookup(each.value, "ip_version", null)
+
+  icmp {
+    type = each.value.icmp.type
+    code = lookup(each.value.icmp, "code", null) == null ? null : each.value.icmp.code
+  }
+}
+
+resource "ibm_is_instance" "bastion" {
+  name           = var.name
+  vpc            = var.vpc_id
+  zone           = data.ibm_is_subnet.subnet.zone
+  profile        = var.profile_name
+  image          = data.ibm_is_image.image.id
+  keys           = var.ssh_key_ids
+  resource_group = var.resource_group_id
+
+  #user_data = var.init_script != "" ? var.init_script : file("${path.module}/init-script-ubuntu.sh")
 
   primary_network_interface {
-    subnet                = ibm_is_subnet.subnet.id
-    allow_ip_spoofing     = false
+    subnet            = data.ibm_is_subnet.subnet.id
+    allow_ip_spoofing = false
+    security_groups   = [ibm_is_security_group.bastion.id]
   }
-
   network_interfaces {
-    name   = "eth1"
-    subnet = ibm_is_subnet.subnet.id
+    name              = "eth1"
+    subnet            = data.ibm_is_subnet.subnet.id
     allow_ip_spoofing = false
   }
 
@@ -75,5 +125,38 @@ resource "ibm_is_instance" "instance" {
     create = "15m"
     update = "15m"
     delete = "15m"
+  }
+
+
+  boot_volume {
+    name = "${var.name}-boot"
+  }
+
+  tags = var.tags
+}
+
+resource "ibm_is_floating_ip" "bastion" {
+  count = var.create_public_ip ? 1 : 0
+
+  name           = "${var.name}-ip"
+  target         = ibm_is_instance.bastion.primary_network_interface[0].id
+  resource_group = var.resource_group_id
+
+  tags = var.tags
+}
+
+resource "ibm_is_security_group" "maintenance" {
+  name           = "${var.name}-maintenance"
+  vpc            = var.vpc_id
+  resource_group = var.resource_group_id
+}
+
+resource "ibm_is_security_group_rule" "maintenance_ssh_inbound" {
+  group     = ibm_is_security_group.maintenance.id
+  direction = "inbound"
+  remote    = ibm_is_security_group.bastion.id
+  tcp {
+    port_min = 22
+    port_max = 22
   }
 }
