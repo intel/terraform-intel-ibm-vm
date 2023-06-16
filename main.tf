@@ -1,3 +1,16 @@
+# Single VM Creation
+# Assumptions:
+#    VPC Exist
+#    Subnet Exist
+#    Resource Group Exist
+#    SSH Key Exist
+#    Security Group (enhancement) if not then we create new Group with SSH inbound only and outbound ANY.
+#    Creates a Public IP (defaults to true)
+#    Intel CPU instance Profile 
+#    Image - (defaults to ubuntu 22.04)
+#
+
+
 data "ibm_is_image" "image" {
   name = var.image_name
 }
@@ -24,74 +37,85 @@ resource "ibm_is_security_group_rule" "ssh_inbound" {
   }
 }
 
-#Outbound SSH to the public ip that gets assigned
-resource "ibm_is_security_group_rule" "ssh_to_self_public_ip" {
-  count = var.create_public_ip ? 1 : 0
-
+#Allows all ports outbound to a new security group that gets created.
+resource "ibm_is_security_group_rule" "allow_outbound" {
   group     = ibm_is_security_group.vpcinstance.id
   direction = "outbound"
-  remote    = ibm_is_floating_ip.vpcinstance[0].address
+  remote    = var.allow_outbound
   tcp {
-    port_min = 22
-    port_max = 22
+    port_min = 1
+    port_max = 65535
   }
 }
 
-# Adds default rules to the new security group
-resource "ibm_is_security_group_rule" "additional_all_rules" {
-  for_each = {
-    for rule in var.security_group_rules : rule.name => rule if lookup(rule, "tcp", null) == null && lookup(rule, "udp", null) == null && lookup(rule, "icmp", null) == null
-  }
-  group      = ibm_is_security_group.vpcinstance.id
-  direction  = each.value.direction
-  remote     = each.value.remote
-  ip_version = lookup(each.value, "ip_version", null)
-}
+# #Outbound SSH to the public ip that gets assigned
+# resource "ibm_is_security_group_rule" "ssh_to_self_public_ip" {
+#   count = var.create_public_ip ? 1 : 0
 
-resource "ibm_is_security_group_rule" "additional_tcp_rules" {
-  for_each = {
-    for rule in var.security_group_rules : rule.name => rule if lookup(rule, "tcp", null) != null
-  }
-  group      = ibm_is_security_group.vpcinstance.id
-  direction  = each.value.direction
-  remote     = each.value.remote
-  ip_version = lookup(each.value, "ip_version", null)
+#   group     = ibm_is_security_group.vpcinstance.id
+#   direction = "outbound"
+#   remote    = ibm_is_floating_ip.vpcinstance[0].address
+#   tcp {
+#     port_min = 1
+#     port_max = 65535
+#   }
+# }
 
-  tcp {
-    port_min = each.value.tcp.port_min
-    port_max = each.value.tcp.port_max
-  }
-}
+# # Adds default rules to the new security group
+# resource "ibm_is_security_group_rule" "additional_all_rules" {
+#   for_each = {
+#     for rule in var.security_group_rules : rule.name => rule if lookup(rule, "tcp", null) == null && lookup(rule, "udp", null) == null && lookup(rule, "icmp", null) == null
+#   }
+#   group      = ibm_is_security_group.vpcinstance.id
+#   direction  = each.value.direction
+#   remote     = each.value.remote
+#   ip_version = lookup(each.value, "ip_version", null)
+# }
 
-resource "ibm_is_security_group_rule" "additional_udp_rules" {
-  for_each = {
-    for rule in var.security_group_rules : rule.name => rule if lookup(rule, "udp", null) != null
-  }
-  group      = ibm_is_security_group.vpcinstance.id
-  direction  = each.value.direction
-  remote     = each.value.remote
-  ip_version = lookup(each.value, "ip_version", null)
+# resource "ibm_is_security_group_rule" "additional_tcp_rules" {
+#   for_each = {
+#     for rule in var.security_group_rules : rule.name => rule if lookup(rule, "tcp", null) != null
+#   }
+#   group      = ibm_is_security_group.vpcinstance.id
+#   direction  = each.value.direction
+#   remote     = each.value.remote
+#   ip_version = lookup(each.value, "ip_version", null)
 
-  udp {
-    port_min = each.value.udp.port_min
-    port_max = each.value.udp.port_max
-  }
-}
+#   tcp {
+#     port_min = each.value.tcp.port_min
+#     port_max = each.value.tcp.port_max
+#   }
+# }
 
-resource "ibm_is_security_group_rule" "additional_icmp_rules" {
-  for_each = {
-    for rule in var.security_group_rules : rule.name => rule if lookup(rule, "icmp", null) != null
-  }
-  group      = ibm_is_security_group.vpcinstance.id
-  direction  = each.value.direction
-  remote     = each.value.remote
-  ip_version = lookup(each.value, "ip_version", null)
+# resource "ibm_is_security_group_rule" "additional_udp_rules" {
+#   for_each = {
+#     for rule in var.security_group_rules : rule.name => rule if lookup(rule, "udp", null) != null
+#   }
+#   group      = ibm_is_security_group.vpcinstance.id
+#   direction  = each.value.direction
+#   remote     = each.value.remote
+#   ip_version = lookup(each.value, "ip_version", null)
 
-  icmp {
-    type = each.value.icmp.type
-    code = lookup(each.value.icmp, "code", null) == null ? null : each.value.icmp.code
-  }
-}
+#   udp {
+#     port_min = each.value.udp.port_min
+#     port_max = each.value.udp.port_max
+#   }
+# }
+
+# resource "ibm_is_security_group_rule" "additional_icmp_rules" {
+#   for_each = {
+#     for rule in var.security_group_rules : rule.name => rule if lookup(rule, "icmp", null) != null
+#   }
+#   group      = ibm_is_security_group.vpcinstance.id
+#   direction  = each.value.direction
+#   remote     = each.value.remote
+#   ip_version = lookup(each.value, "ip_version", null)
+
+#   icmp {
+#     type = each.value.icmp.type
+#     code = lookup(each.value.icmp, "code", null) == null ? null : each.value.icmp.code
+#   }
+# }
 
 resource "ibm_is_instance" "vpcinstance" {
   name           = var.name

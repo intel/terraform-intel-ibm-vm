@@ -82,6 +82,13 @@ variable "allow_ssh_from" {
   default     = "0.0.0.0/0"
 }
 
+#Allow Outbound Ports
+variable "allow_outbound" {
+  type        = string
+  description = "An IP address, a CIDR block, or a single security group identifier to allow outbound network connections"
+  default     = "0.0.0.0/0"
+}
+
 variable "security_group_rules" {
   description = "List of security group rules to set on the new security group created, in addition to the SSH rules"
   default = [
