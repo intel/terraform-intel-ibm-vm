@@ -50,6 +50,7 @@ variable "image_name" {
   description = "Name of the OS image to use for the instance"
 }
 
+# See if there is a way to have a variable where the user can enter an existing SG to when creating the VM
 # variable "existing_sg" {
 #   type=string
 #   default = ""
@@ -68,17 +69,17 @@ variable "profile_name" {
   default     = "bx2-2x8"
 }
 
-variable "allow_ssh_from" {
-  type        = string
-  description = "An IP address, a CIDR block, or a single security group identifier to allow incoming SSH connection to the instance"
-  default     = "0.0.0.0/0"
-  #Show example of a existing SG ID as an example.
-}
-
 variable "create_public_ip" {
   type        = bool
   description = "Set whether to allocate a public IP address for the instance"
   default     = true
+}
+
+# New SG created configurations below
+variable "allow_ssh_from" {
+  type        = string
+  description = "An IP address, a CIDR block, or a single security group identifier to allow incoming SSH connection to the instance"
+  default     = "0.0.0.0/0"
 }
 
 variable "security_group_rules" {
