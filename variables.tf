@@ -14,94 +14,120 @@ variable "region" {
   default     = "us-south"
 }
 
-variable "vpc_name" {
+variable "name" {
   type        = string
-  description = "The name of the VPC."
-  default     = "wsf-vpc"
+  default     = "vm01"
+  description = "Name of the instance"
 }
 
-variable "subnet_name" {
+variable "resource_group_id" {
   type        = string
-  description = "The name of the subnet."
-  default     = "intel-test01-sn"
+  default     = "0d2599fc021c4bc19e8a330fd8286dbd"
+  description = "ID of the resource group that has the VPC, SSH key, etc."
 }
 
-variable "zone" {
+variable "vpc_id" {
   type        = string
-  description = "The zone where the resources will be created."
-  default     = "us-south-1"
+  default     = "r006-df129de8-bde1-4cda-932c-32e9cdd2e7c7"
+  description = "ID of the VPC where to create the instance"
 }
 
-variable "ipv4_cidr_block" {
+variable "subnet_id" {
   type        = string
-  description = "The CIDR block for the subnet."
-  default     = "10.240.0.0/24"
+  default     = "0717-80ebe088-c5e7-4964-a4b9-ebb6acec6dcc"
+  description = "ID of the subnet in the VPC where to create the instance"
 }
 
-variable "security_group_name" {
-  type        = string
-  description = "The name of the security group."
-  default     = "intel-test01-sg"
-}
-
-variable "security_group_description" {
-  type        = string
-  description = "The description of the security group."
-  default     = "Test security group"
-}
-
-variable "remote_ip_prefix" {
-  type        = string
-  description = "The CIDR block for remote access."
-  default     = "0.0.0.0/0"
-}
-
-variable "protocol" {
-  type        = string
-  description = "The protocol for remote access."
-  default     = "tcp"
-}
-
-variable "port_min" {
-  type        = number
-  description = "The minimum port number for remote access."
-  default     = 22
-}
-
-variable "port_max" {
-  type        = number
-  description = "The maximum port number for remote access."
-  default     = 22
-}
-
-variable "ssh_key_name" {
-  type        = string
-  description = "The name of the SSH key."
-  default     = "wsf-key01"
-}
-
-variable "ssh_key_public" {
-  type        = string
-  description = "Public key to use when generating SSH Key"
-  default     = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDBzaaVccW+zXSRS6qK9yNvGYTHE2GCkguHWCKI7qzYP2eKp4iusJqK0ScwMtkKctmH/TWktT6p3/K8sunnupcwa4brx1Ua64hKdvTWs1hw/HlxYU5ZSOjbuKJJrRsu117CnjSNyW+NBF3roDMXLE7ygvFNOx+UaDdZifwGIA7EYu/Afo3vVjb4EETW0l+KDVE0XWRdkc7eK6J3RqSEzVaNgqdQDYHqaveFQg6LiCQ/Xc8+OpXjVbJT7SirdwdSCpRPfSJhVpp9lkKa/gqKjWUtWUzZbLBBt2M0T4PgsdC7gmhPlB6j95EVxTGGNQgGFZsxAEFe4klJnpz7P/9o6WDB0KeJRndiml6l/Evj+GR0NZA9R5qFVbPR2cJpNSAOX6S6aqssKtHeIF02vHhXT4Hq0ctH5ly/OP0NupkZYgu9A4wY46WRcoMu/U4gB6Q9AQ4AcaxUVRsIOYSZE0p++X3/WsOuNAEFDi39dnKyEnoRL/SJkUFUFd41OhQfLGWyxoU="
-}
-
-variable "instance_name" {
-  description = "The name of the instance."
-  default     = "wsf-test01-vm"
+variable "ssh_key_ids" {
+  type        = list(string)
+  description = "List of SSH key IDs to inject into the instance.  This is not the public key itself, but just the key's IBM ID"
+  default     = ["r006-7c2c713a-257d-4dcd-8882-7aa5b3f5ad3e"]
 }
 
 variable "image_name" {
   type        = string
-  description = "The name of the image."
-  default     = "r006-c2c24ac1-b03d-4427-85cf-92e95d4aa658"
-  #Look this up from the CLI
+  default     = "ibm-ubuntu-22-04-2-minimal-amd64-1"
+  description = "Name of the OS image to use for the instance"
+}
+
+# See if there is a way to have a variable where the user can enter an existing SG to when creating the VM
+# variable "existing_sg" {
+#   type=string
+#   default = ""
+#   description = "ID of the existing security group you want to add the instance "
+# }
+
+variable "init_script" {
+  type        = string
+  default     = ""
+  description = "Script to run during the instance initialization. Defaults to an Ubuntu specific script when set to empty"
 }
 
 variable "profile_name" {
   type        = string
-  description = "The name of the profile."
+  description = "Instance profile for an Intel based Xeon Process to use for the instance"
   default     = "bx2-2x8"
+}
+
+variable "create_public_ip" {
+  type        = bool
+  description = "Set whether to allocate a public IP address for the instance"
+  default     = true
+}
+
+# New SG created configurations below
+variable "allow_ssh_from" {
+  type        = string
+  description = "An IP address, a CIDR block, or a single security group identifier to allow incoming SSH connection to the instance"
+  default     = "0.0.0.0/0"
+}
+
+variable "security_group_rules" {
+  description = "List of security group rules to set on the new security group created, in addition to the SSH rules"
+  default = [
+    {
+      name      = "http_outbound"
+      direction = "outbound"
+      remote    = "0.0.0.0/0"
+      tcp = {
+        port_min = 80
+        port_max = 80
+      }
+    },
+    {
+      name      = "https_outbound"
+      direction = "outbound"
+      remote    = "0.0.0.0/0"
+      tcp = {
+        port_min = 443
+        port_max = 443
+      }
+    },
+    {
+      name      = "dns_outbound"
+      direction = "outbound"
+      remote    = "0.0.0.0/0"
+      udp = {
+        port_min = 53
+        port_max = 53
+      }
+    },
+    {
+      name      = "icmp_outbound"
+      direction = "outbound"
+      remote    = "0.0.0.0/0"
+      icmp = {
+        type = 8
+      }
+    }
+  ]
+}
+
+variable "tags" {
+  type        = list(string)
+  description = "List of tags to add on all created resources"
+  default     = []
+  #Add Intel Tags here
 }
 
 
