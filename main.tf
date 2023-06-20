@@ -1,14 +1,14 @@
-# Single VM Creation
-# Assumptions:
-#    VPC Exist
-#    Subnet Exist
-#    Resource Group Exist
-#    SSH Key Exist
-#    Security Group (enhancement) if not then we create new Group with SSH inbound only and outbound ANY.
-#    Creates a Public IP (defaults to true)
-#    Intel CPU instance Profile 
-#    Image - (defaults to ubuntu 22.04)
+
+# In this block the code determines the minimum CPU platform based on the machine type that the use has selected. We always recommend our customers to use the 
+# latest generation of Intel CPU platforms that are publicly available . As of the date of this repo creation, the General Purpose bx2-2x8 instances can be on either Ice Lake 
+# or Cascade Lake for the same price. For better price and performance, we are recommendaing to use Intel Ice Lake instances where possible. 
 #
+# This module was created with the assumption that you have some infrastructure in place and you want to automate an Virtual server in an existing account/network.
+# Assumptions:
+#    VPC Exists
+#    Subnet(s) Exists
+#    Resource Group Exist
+#    SSH Key(s) Exist
 
 
 data "ibm_is_image" "image" {
@@ -48,6 +48,52 @@ resource "ibm_is_security_group_rule" "allow_outbound" {
   }
 }
 
+resource "ibm_is_instance" "vpcinstance" {
+  name           = var.name
+  vpc            = var.vpc_id
+  zone           = data.ibm_is_subnet.subnet.zone
+  profile        = var.profile_name
+  image          = data.ibm_is_image.image.id
+  keys           = var.ssh_key_ids
+  resource_group = var.resource_group_id
+
+  # If you want to pass user data to the instance upon creation this is the code to add that to your terraform script.
+  #user_data = var.init_script != "" ? var.init_script : file("${path.module}/init-script-ubuntu.sh")
+
+  primary_network_interface {
+    name              = "eth1"
+    subnet            = data.ibm_is_subnet.subnet.id
+    allow_ip_spoofing = false
+    security_groups   = [ibm_is_security_group.vpcinstance.id]
+  }
+
+  timeouts {
+    create = "15m"
+    update = "15m"
+    delete = "15m"
+  }
+
+  # Names the disk volume the same as the VM instance name
+  boot_volume {
+    name = "${var.name}-boot"
+  }
+
+  tags = var.tags
+}
+
+#Assigns an IP to the network interface and names it with the instance name
+resource "ibm_is_floating_ip" "vpcinstance" {
+  count = var.create_public_ip ? 1 : 0
+
+  name           = "${var.name}-ip"
+  target         = ibm_is_instance.vpcinstance.primary_network_interface[0].id
+  resource_group = var.resource_group_id
+
+  tags = var.tags
+}
+
+
+# The following code is intended to provide you the code to be more specific with the Security Group rules that you want to create with terraform.
 # #Outbound SSH to the public ip that gets assigned
 # resource "ibm_is_security_group_rule" "ssh_to_self_public_ip" {
 #   count = var.create_public_ip ? 1 : 0
@@ -116,48 +162,3 @@ resource "ibm_is_security_group_rule" "allow_outbound" {
 #     code = lookup(each.value.icmp, "code", null) == null ? null : each.value.icmp.code
 #   }
 # }
-
-resource "ibm_is_instance" "vpcinstance" {
-  name           = var.name
-  vpc            = var.vpc_id
-  zone           = data.ibm_is_subnet.subnet.zone
-  profile        = var.profile_name
-  image          = data.ibm_is_image.image.id
-  keys           = var.ssh_key_ids
-  resource_group = var.resource_group_id
-
-  # If you want to pass user data to the instance upon creation
-  #user_data = var.init_script != "" ? var.init_script : file("${path.module}/init-script-ubuntu.sh")
-
-  primary_network_interface {
-    name              = "eth1"
-    subnet            = data.ibm_is_subnet.subnet.id
-    allow_ip_spoofing = false
-    security_groups   = [ibm_is_security_group.vpcinstance.id]
-  }
-
-  timeouts {
-    create = "15m"
-    update = "15m"
-    delete = "15m"
-  }
-
-  # Names the disk volume the same as the VM instance name
-  boot_volume {
-    name = "${var.name}-boot"
-  }
-
-  tags = var.tags
-}
-
-#Assigns an IP to the network interface
-resource "ibm_is_floating_ip" "vpcinstance" {
-  count = var.create_public_ip ? 1 : 0
-
-  name           = "${var.name}-ip"
-  target         = ibm_is_instance.vpcinstance.primary_network_interface[0].id
-  resource_group = var.resource_group_id
-
-  tags = var.tags
-}
-
