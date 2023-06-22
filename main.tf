@@ -81,72 +81,72 @@ resource "ibm_is_floating_ip" "vpcinstance" {
 }
 
 
-# The following code is intended to provide you the code to be more specific with the Security Group rules that you want to create with terraform.
-# #Outbound SSH to the public ip that gets assigned
-# resource "ibm_is_security_group_rule" "ssh_to_self_public_ip" {
-#   count = var.create_public_ip ? 1 : 0
+#The following code is intended to provide you the code to be more specific with the Security Group rules that you want to create with terraform.
+#Outbound SSH to the public ip that gets assigned
+resource "ibm_is_security_group_rule" "ssh_to_self_public_ip" {
+  count = var.create_public_ip ? 1 : 0
 
-#   group     = ibm_is_security_group.vpcinstance.id
-#   direction = "outbound"
-#   remote    = ibm_is_floating_ip.vpcinstance[0].address
-#   tcp {
-#     port_min = 1
-#     port_max = 65535
-#   }
-# }
+  group     = ibm_is_security_group.vpcinstance.id
+  direction = "outbound"
+  remote    = ibm_is_floating_ip.vpcinstance[0].address
+  tcp {
+    port_min = 1
+    port_max = 65535
+  }
+}
 
-# # Adds default rules to the new security group
-# resource "ibm_is_security_group_rule" "additional_all_rules" {
-#   for_each = {
-#     for rule in var.security_group_rules : rule.name => rule if lookup(rule, "tcp", null) == null && lookup(rule, "udp", null) == null && lookup(rule, "icmp", null) == null
-#   }
-#   group      = ibm_is_security_group.vpcinstance.id
-#   direction  = each.value.direction
-#   remote     = each.value.remote
-#   ip_version = lookup(each.value, "ip_version", null)
-# }
+# Adds default rules to the new security group
+resource "ibm_is_security_group_rule" "additional_all_rules" {
+  for_each = {
+    for rule in var.security_group_rules : rule.name => rule if lookup(rule, "tcp", null) == null && lookup(rule, "udp", null) == null && lookup(rule, "icmp", null) == null
+  }
+  group      = ibm_is_security_group.vpcinstance.id
+  direction  = each.value.direction
+  remote     = each.value.remote
+  ip_version = lookup(each.value, "ip_version", null)
+}
 
-# resource "ibm_is_security_group_rule" "additional_tcp_rules" {
-#   for_each = {
-#     for rule in var.security_group_rules : rule.name => rule if lookup(rule, "tcp", null) != null
-#   }
-#   group      = ibm_is_security_group.vpcinstance.id
-#   direction  = each.value.direction
-#   remote     = each.value.remote
-#   ip_version = lookup(each.value, "ip_version", null)
+resource "ibm_is_security_group_rule" "additional_tcp_rules" {
+  for_each = {
+    for rule in var.security_group_rules : rule.name => rule if lookup(rule, "tcp", null) != null
+  }
+  group      = ibm_is_security_group.vpcinstance.id
+  direction  = each.value.direction
+  remote     = each.value.remote
+  ip_version = lookup(each.value, "ip_version", null)
 
-#   tcp {
-#     port_min = each.value.tcp.port_min
-#     port_max = each.value.tcp.port_max
-#   }
-# }
+  tcp {
+    port_min = each.value.tcp.port_min
+    port_max = each.value.tcp.port_max
+  }
+}
 
-# resource "ibm_is_security_group_rule" "additional_udp_rules" {
-#   for_each = {
-#     for rule in var.security_group_rules : rule.name => rule if lookup(rule, "udp", null) != null
-#   }
-#   group      = ibm_is_security_group.vpcinstance.id
-#   direction  = each.value.direction
-#   remote     = each.value.remote
-#   ip_version = lookup(each.value, "ip_version", null)
+resource "ibm_is_security_group_rule" "additional_udp_rules" {
+  for_each = {
+    for rule in var.security_group_rules : rule.name => rule if lookup(rule, "udp", null) != null
+  }
+  group      = ibm_is_security_group.vpcinstance.id
+  direction  = each.value.direction
+  remote     = each.value.remote
+  ip_version = lookup(each.value, "ip_version", null)
 
-#   udp {
-#     port_min = each.value.udp.port_min
-#     port_max = each.value.udp.port_max
-#   }
-# }
+  udp {
+    port_min = each.value.udp.port_min
+    port_max = each.value.udp.port_max
+  }
+}
 
-# resource "ibm_is_security_group_rule" "additional_icmp_rules" {
-#   for_each = {
-#     for rule in var.security_group_rules : rule.name => rule if lookup(rule, "icmp", null) != null
-#   }
-#   group      = ibm_is_security_group.vpcinstance.id
-#   direction  = each.value.direction
-#   remote     = each.value.remote
-#   ip_version = lookup(each.value, "ip_version", null)
+resource "ibm_is_security_group_rule" "additional_icmp_rules" {
+  for_each = {
+    for rule in var.security_group_rules : rule.name => rule if lookup(rule, "icmp", null) != null
+  }
+  group      = ibm_is_security_group.vpcinstance.id
+  direction  = each.value.direction
+  remote     = each.value.remote
+  ip_version = lookup(each.value, "ip_version", null)
 
-#   icmp {
-#     type = each.value.icmp.type
-#     code = lookup(each.value.icmp, "code", null) == null ? null : each.value.icmp.code
-#   }
-# }
+  icmp {
+    type = each.value.icmp.type
+    code = lookup(each.value.icmp, "code", null) == null ? null : each.value.icmp.code
+  }
+}

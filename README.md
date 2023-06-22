@@ -29,7 +29,7 @@ This module provides the functionality to ensure that you are utilizing Intel's 
 
 ## Usage
 
-See examples folder for code ./examples/intel-optimized-vm
+See examples folder for code ./examples/intel-ibm-linux-vpc
 
 Example of main.tf
 #
@@ -68,7 +68,7 @@ terraform apply
 Note that this example may create resources. Run `terraform destroy` when you don't need these resources anymore.
 Example of how to pass variable :
 ```hcl
-# terraform destpoy -var="region=us-south" -var="name=name1"
+# terraform destroy -var="region=us-south" -var="name=name1"
 ```
 
 ## Considerations  
