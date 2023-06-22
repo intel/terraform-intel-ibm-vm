@@ -1,16 +1,4 @@
 
-# In this block the code determines the minimum CPU platform based on the machine type that the use has selected. We always recommend our customers to use the 
-# latest generation of Intel CPU platforms that are publicly available . As of the date of this repo creation, the General Purpose bx2-2x8 instances can be on either Ice Lake 
-# or Cascade Lake for the same price. For better price and performance, we are recommendaing to use Intel Ice Lake instances where possible. 
-#
-# This module was created with the assumption that you have some infrastructure in place and you want to automate an Virtual server in an existing account/network.
-# Assumptions:
-#    VPC Exists
-#    Subnet(s) Exists
-#    Resource Group Exist
-#    SSH Key(s) Exist
-
-
 data "ibm_is_image" "image" {
   name = var.image_name
 }
