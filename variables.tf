@@ -79,6 +79,7 @@ variable "ssh_key_ids" {
 variable "image_name" {
   type        = string
   description = "Name of the OS image to use for the instance"
+  default     = "ibm-ubuntu-22-04-2-minimal-amd64-1"
 }
 
 variable "init_script" {
@@ -103,6 +104,7 @@ variable "create_public_ip" {
 variable "allow_ssh_from" {
   type        = string
   description = "An IP address, a CIDR block, or a single security group identifier to allow incoming SSH connection to the instance"
+  default     = "0.0.0.0/0"
 }
 
 # Security Group Created allows outbound ports

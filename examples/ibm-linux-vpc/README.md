@@ -16,7 +16,8 @@ This example also requires that you provide the SSH Key as a variable. It associ
 
 **See examples folder ./examples/ibm-linux-vpc**
 
-variables.tf
+* <b>Example of main.tf</b>
+
 Required Variables:
 * <b>region</b> = name of the IBM Cloud region you want to use
 * <b>name</b> = (This is the VM name, and it will also be used in the name of the Security Group that gets created)
@@ -25,47 +26,15 @@ Required Variables:
 * <b>subnet_id</b> = The unique ID of the subnet that you want to use.
 * <b>ssh_key_ids</b> = List of the unique SSH Key ID's that you want to add to the instance once it is created.  Seperate ID's with commas to add more than one to the Instance.
 
+<b>Example of variables.tf</b>
+* Enter the region you want to use here
 ```hcl
 variable "region" {
   type        = string
   description = "The region where the resources will be created."
   default     = "us-south"
 }
-
-variable "name" {
-  type        = string
-  default     = "vm01"
-  description = "Name of the instance"
-}
-
-variable "resource_group_id" {
-  type        = string
-  default     = "00000000000000000000000000000"
-  description = "ID of the resource group that has the VPC, SSH key, etc."
-}
-
-variable "vpc_id" {
-  type        = string
-  default     = "00000000000000000000000000000"
-  description = "ID of the VPC where to create the instance"
-}
-
-variable "subnet_id" {
-  type        = string
-  default     = "00000000000000000000000000000"
-  description = "ID of the subnet in the VPC where to create the instance"
-}
-
-variable "ssh_key_ids" {
-  type        = list(string)
-  description = "List of SSH key IDs to inject into the instance.  This is not the public key itself, but just the key's IBM ID"
-  default     = ["00000000000000000000000000000"]
-}
 ```
-Example of main.tf
-#
-
-#
 
 #
 Example of how to pass variable :
