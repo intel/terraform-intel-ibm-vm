@@ -54,30 +54,22 @@ variable "name" {
 
 variable "resource_group_id" {
   type    = string
-  default = "0d2599fc021c4bc19e8a330fd8286dbd"
-  #default     = "00000000000000000000000000000000"
   description = "ID of the resource group that has the VPC, SSH key, etc."
 }
 
 variable "vpc_id" {
   type    = string
-  default = "r006-df129de8-bde1-4cda-932c-32e9cdd2e7c7"
-  #default     = "0000-00000000-0000-0000-0000-000000000000"
   description = "ID of the VPC where to create the instance"
 }
 
 variable "subnet_id" {
   type    = string
-  default = "0717-80ebe088-c5e7-4964-a4b9-ebb6acec6dcc"
-  #default     = "0000-00000000-0000-0000-0000-000000000000"
   description = "ID of the subnet in the VPC where to create the instance"
 }
 
 variable "ssh_key_ids" {
   type        = list(string)
   description = "List of SSH key IDs to inject into the instance.  This is not the public key itself, but just the key's IBM ID"
-  default     = ["r006-7c2c713a-257d-4dcd-8882-7aa5b3f5ad3e"]
-  #default     = ["0000-00000000-0000-0000-0000-000000000000"]
 }
 
 ########################
@@ -99,7 +91,6 @@ variable "init_script" {
 variable "profile_name" {
   type        = string
   description = "Instance profile for an Intel based Xeon Process to use for the instance"
-  default     = "bx2-2x8"
 }
 
 variable "create_public_ip" {
@@ -112,7 +103,6 @@ variable "create_public_ip" {
 variable "allow_ssh_from" {
   type        = string
   description = "An IP address, a CIDR block, or a single security group identifier to allow incoming SSH connection to the instance"
-  default     = "0.0.0.0/0"
 }
 
 # Security Group Created allows outbound ports
@@ -125,33 +115,33 @@ variable "allow_outbound" {
 variable "security_group_rules" {
   description = "List of security group rules to set on the new security group created, in addition to the SSH rules"
   default = [
-    {
-      name      = "http_outbound"
-      direction = "outbound"
-      remote    = "0.0.0.0/0"
-      tcp = {
-        port_min = 80
-        port_max = 80
-      }
-    },
-    {
-      name      = "https_outbound"
-      direction = "outbound"
-      remote    = "0.0.0.0/0"
-      tcp = {
-        port_min = 443
-        port_max = 443
-      }
-    },
-    {
-      name      = "dns_outbound"
-      direction = "outbound"
-      remote    = "0.0.0.0/0"
-      udp = {
-        port_min = 53
-        port_max = 53
-      }
-    },
+    # {
+    #   name      = "http_outbound"
+    #   direction = "outbound"
+    #   remote    = "0.0.0.0/0"
+    #   tcp = {
+    #     port_min = 80
+    #     port_max = 80
+    #   }
+    # },
+    # {
+    #   name      = "https_outbound"
+    #   direction = "outbound"
+    #   remote    = "0.0.0.0/0"
+    #   tcp = {
+    #     port_min = 443
+    #     port_max = 443
+    #   }
+    # },
+    # {
+    #   name      = "dns_outbound"
+    #   direction = "outbound"
+    #   remote    = "0.0.0.0/0"
+    #   udp = {
+    #     port_min = 53
+    #     port_max = 53
+    #   }
+    # },
     {
       name      = "icmp_outbound"
       direction = "outbound"
