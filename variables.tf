@@ -78,7 +78,6 @@ variable "ssh_key_ids" {
 
 variable "image_name" {
   type        = string
-  default     = "ibm-ubuntu-22-04-2-minimal-amd64-1"
   description = "Name of the OS image to use for the instance"
 }
 
@@ -90,13 +89,14 @@ variable "init_script" {
 
 variable "profile_name" {
   type        = string
-  description = "Instance profile for an Intel based Xeon Process to use for the instance"
+  description = "Instance profile for an Intel based Xeon Processor to use for the instance"
 }
 
 variable "create_public_ip" {
   type        = bool
   description = "Set whether to allocate a public IP address for the instance"
   default     = true
+  #Set this to false if you do not want your instance to have a Public IP
 }
 
 # Security Group Created allows inbound SSH from 0.0.0.0/0
@@ -115,6 +115,7 @@ variable "allow_outbound" {
 variable "security_group_rules" {
   description = "List of security group rules to set on the new security group created, in addition to the SSH rules"
   default = [
+    # Adjust rules below if you want specific inbound our outbound rules in the SG that gets created.
     # {
     #   name      = "http_outbound"
     #   direction = "outbound"
