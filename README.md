@@ -1,32 +1,60 @@
 
 
 <p align="center">
-  <img src="./images/logo-classicblue-800px.png" alt="Intel Logo" width="250"/>
+  <img src="https://github.com/intel/terraform-intel-ibm-vm/blob/main/images/logo-classicblue-800px.png?raw=true" alt="Intel Logo" width="250"/>
 </p>
 
 # Intel® Cloud Optimization Modules for Terraform
 
 © Copyright 2022, Intel Corporation
 
-## Module name
+## IBM VPC Compute Instance
+This module provides the functionality to ensure that you are utilizing Intel's latest generation processor in the creation of a virtual machine in IBM Cloud in a VPC.
+
+## Performance Data
+
+#### Find all the information below plus even more by navigating our full library
+
+#
+
+
+<center>
+
+#### [4th Gen Intel® Xeon® Scalable Processor (Sapphire Rapids)](https://www.intel.com/content/www/us/en/newsroom/news/4th-gen-intel-xeon-outperforms-competition-real-world-workloads.html)
+
+
+</center>
+
+#
 
 ## Usage
 
-See examples folder for code ./examples/intel-optimized-postgresql-server/main.tf
+See examples folder for code ./examples/intel-ibm-linux-vpc
 
 Example of main.tf
-
+#
+This module is designed to allow you to provision a virtual machine in an existing IBM cloud account where you have a VPC created.  You will need to provide several variables to specify certain settings.  These settings include:
+#
+Required Variables:
+* <b>region</b> = name of the IBM Cloud region you want to use
+* <b>name</b> = (This is the VM name, and it will also be used in the name of the Security Group that gets created)
+* <b>resource_group_id</b> = This is the unique ID of the IBM cloud resource group that you want to use.
+* <b>vpc_id</b> = The unique ID of the VPC that you want to use.
+* <b>subnet_id</b> = The unique ID of the subnet that you want to use.
+* <b>ssh_key_ids</b> = List of the unique SSH Key ID's that you want to add to the instance once it is created.  Seperate ID's with commas to add more than one to the Instance.
+#
+Example of how to pass variable :
 ```hcl
-# Example of how to pass variable for database password:
-# terraform apply -var="db_password=..."
-# Environment variables can also be used https://www.terraform.io/language/values/variables#environment-variables
+# terraform apply -var="region=us-south" -var="name=name1"
+```
 
-# Provision Intel Cloud Optimization Module
+Environment variables can also be used https://www.terraform.io/language/values/variables#environment-variables
+
+Provision Intel Cloud Optimization Module
 module "module-example" {
-  source = "github.com/intel/module-name"
+  source = "github.com/intel/terraform-intel-ibm-vm"
 }
 
-```
 
 Run Terraform
 test
@@ -38,6 +66,10 @@ terraform apply
 ```
 
 Note that this example may create resources. Run `terraform destroy` when you don't need these resources anymore.
+Example of how to pass variable :
+```hcl
+# terraform destroy -var="region=us-south" -var="name=name1"
+```
 
 ## Considerations  
 <!-- BEGIN_TF_DOCS -->
