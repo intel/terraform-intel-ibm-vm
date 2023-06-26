@@ -53,17 +53,17 @@ variable "name" {
 }
 
 variable "resource_group_id" {
-  type    = string
+  type        = string
   description = "ID of the resource group that has the VPC, SSH key, etc."
 }
 
 variable "vpc_id" {
-  type    = string
+  type        = string
   description = "ID of the VPC where to create the instance"
 }
 
 variable "subnet_id" {
-  type    = string
+  type        = string
   description = "ID of the subnet in the VPC where to create the instance"
 }
 
@@ -166,3 +166,79 @@ variable "tags" {
   default     = []
 }
 
+variable "all_auto_delete_volume" {
+  type        = bool
+  description = "If set to true, automatically deletes the volumes that are attached to an instance."
+  default     = null
+}
+
+variable "availability_policy_host_failure" {
+  type        = string
+  description = "The availability policy to use for this virtual server instance. The action to perform if the compute host experiences a failure. Supported values are restart and stop."
+  default     = null
+}
+
+variable "boot_volume_size" {
+  type        = number
+  description = "The size of the boot volume.(The capacity of the volume in gigabytes. This defaults to minimum capacity of the image and maximum to 250."
+  default     = null
+}
+
+variable "boot_volume_auto_delete_volume" {
+  type        = string
+  description = "If set to true, when deleting the instance the volume will also be deleted."
+  default     = null
+}
+
+variable "boot_volume_encryption" {
+  type        = string
+  description = "The type of encryption to use for the boot volume."
+}
+
+variable "dedicated_host" {
+  type        = string
+  description = "The placement restrictions to use the virtual server instance. Unique ID of the dedicated host where the instance id placed."
+  default     = null
+}
+
+variable "dedicated_host_group" {
+  type        = string
+  description = "The placement restrictions to use for the virtual server instance. Unique ID of the dedicated host group where the instance is placed."
+  default     = null
+}
+
+variable "placement_group" {
+  type        = string
+  description = "Unique Identifier of the Placement Group for restricting the placement of the instance."
+  default     = null
+}
+
+variable "instance_template" {
+  type        = string
+  description = "ID of the instance template to create the instance from."
+  default     = null
+}
+
+variable "access_tags" {
+  type        = list(any)
+  description = " A list of access management tags to attach to the instance."
+  default     = null
+}
+
+variable "total_volume_bandwidth" {
+  type        = number
+  description = "The amount of bandwidth (in megabits per second) allocated exclusively to instance storage volumes."
+  default     = null
+}
+
+variable "user_data" {
+  type        = string
+  description = "User data to transfer to the instance."
+  default     = null
+}
+
+variable "volumes" {
+  type        = list(any)
+  description = "A comma separated list of volume IDs to attach to the instance."
+  default     = null
+}

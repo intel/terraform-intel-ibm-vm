@@ -47,6 +47,15 @@ resource "ibm_is_instance" "vpcinstance" {
   # If you want to pass user data to the instance upon creation this is the code to add that to your terraform script.
   #user_data = var.init_script != "" ? var.init_script : file("${path.module}/init-script-ubuntu.sh")
 
+  access_tags                      = var.access_tags
+  auto_delete_volume               = var.all_auto_delete_volume
+  availability_policy_host_failure = var.availability_policy_host_failure
+  instance_template                = var.instance_template
+  user_data                        = var.user_data
+
+  dedicated_host       = var.dedicated_host
+  dedicated_host_group = var.dedicated_host_group
+  placement_group      = var.placement_group
 
   primary_network_interface {
     name              = "eth1"
@@ -61,9 +70,17 @@ resource "ibm_is_instance" "vpcinstance" {
     delete = "15m"
   }
 
+  total_volume_bandwidth = var.total_volume_bandwidth
+  volumes                = [var.volumes]
+
   # Names the disk volume the same as the VM instance name
   boot_volume {
-    name = "${var.name}-boot"
+    name               = "${var.name}-boot"
+    auto_delete_volume = var.boot_volume_auto_delete_volume
+    encryption         = var.boot_volume_encryption
+    size               = var.boot_volume_size
+    tags               = var.tags
+
   }
 
   tags = var.tags
