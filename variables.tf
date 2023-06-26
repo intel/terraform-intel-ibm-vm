@@ -70,6 +70,7 @@ variable "subnet_id" {
 variable "ssh_key_ids" {
   type        = list(string)
   description = "List of SSH key IDs to inject into the instance.  This is not the public key itself, but just the key's IBM ID"
+
 }
 
 ########################
@@ -101,11 +102,14 @@ variable "create_public_ip" {
 }
 
 # Security Group Created allows inbound SSH from 0.0.0.0/0
+
+
 variable "allow_ssh_from" {
   type        = string
   description = "An IP address, a CIDR block, or a single security group identifier to allow incoming SSH connection to the instance"
   default     = "0.0.0.0/0"
 }
+
 
 # Security Group Created allows outbound ports
 variable "allow_outbound" {

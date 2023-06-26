@@ -1,4 +1,3 @@
-
 data "ibm_is_image" "image" {
   name = var.image_name
 }
@@ -48,6 +47,7 @@ resource "ibm_is_instance" "vpcinstance" {
   # If you want to pass user data to the instance upon creation this is the code to add that to your terraform script.
   #user_data = var.init_script != "" ? var.init_script : file("${path.module}/init-script-ubuntu.sh")
 
+
   primary_network_interface {
     name              = "eth1"
     subnet            = data.ibm_is_subnet.subnet.id
@@ -70,6 +70,7 @@ resource "ibm_is_instance" "vpcinstance" {
 }
 
 #Assigns an IP to the network interface and names it with the instance name
+
 resource "ibm_is_floating_ip" "vpcinstance" {
   count = var.create_public_ip ? 1 : 0
 
@@ -150,3 +151,4 @@ resource "ibm_is_security_group_rule" "additional_icmp_rules" {
     code = lookup(each.value.icmp, "code", null) == null ? null : each.value.icmp.code
   }
 }
+
