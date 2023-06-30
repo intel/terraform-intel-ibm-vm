@@ -83,19 +83,6 @@ resource "ibm_is_instance" "vpcinstance" {
 
   volumes = var.create_volume == 0 ? var.existing_volume_ids : ibm_is_volume.volume.*.id
 
-  # volumes = var.volumes[]
-  # dynamic "volumes" {
-  #   for_each = var.volumes
-  #   content {
-  #     name           = lookup(volumes.value, "name", null)
-  #     profile        = lookup(volumes.value, "profile", null)
-  #     capacity       = lookup(volumes.value, "capacity", null)
-  #     iops           = lookup(volumes.value, "iops", null)
-  #     encryption_key = lookup(volumes.value, "encryption_key", null)
-  #   }
-  # }
-
-
   # Names the disk volume the same as the VM instance name
   boot_volume {
     name               = "${var.name}-boot"

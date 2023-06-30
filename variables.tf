@@ -261,16 +261,3 @@ variable "volume_profile" {
   description = "Profile to use for the volume"
   default     = null
 }
-
-# variable "volumes" {
-#   description = "A comma separated list of volume IDs to attach to the instance."
-#   type        = list(object({
-#     name = string
-#     profile = string
-#     zone = string
-#     capacity = number
-#     iops = number
-#     encryption_key = string
-#   }))
-#   default     = []
-# }
