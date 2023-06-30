@@ -239,27 +239,27 @@ variable "user_data" {
 }
 
 variable "existing_volume_ids" {
-  type  = list(string)
+  type        = list(string)
   description = "A list of maps describing the volumes for each instance"
-  default = []
+  default     = []
 }
 
 variable "create_volume" {
-  type = number
+  type        = number
   description = "If you want to create a volume, change from 0"
-  default = 0
+  default     = 0
 }
 
 variable "volume_name" {
-  type = string
+  type        = string
   description = "Name of the volume to create"
-  default = null
+  default     = null
 }
 
 variable "volume_profile" {
-  type = string
+  type        = string
   description = "Profile to use for the volume"
-  default = null
+  default     = null
 }
 
 # variable "volumes" {

@@ -36,10 +36,10 @@ resource "ibm_is_security_group_rule" "allow_outbound" {
 }
 
 resource "ibm_is_volume" "volume" {
-  count = var.create_volume == 0 ? length(var.existing_volume_ids) : var.create_volume 
-   name = var.volume_name
-   profile = var.volume_profile
-   zone = data.ibm_is_subnet.subnet.zone
+  count   = var.create_volume == 0 ? length(var.existing_volume_ids) : var.create_volume
+  name    = var.volume_name
+  profile = var.volume_profile
+  zone    = data.ibm_is_subnet.subnet.zone
 }
 
 ################################################################################
@@ -81,9 +81,9 @@ resource "ibm_is_instance" "vpcinstance" {
     delete = "15m"
   }
 
-  volumes = var.create_volume ==0 ? var.existing_volume_ids : ibm_is_volume.volume.*.id
+  volumes = var.create_volume == 0 ? var.existing_volume_ids : ibm_is_volume.volume.*.id
 
- # volumes = var.volumes[]
+  # volumes = var.volumes[]
   # dynamic "volumes" {
   #   for_each = var.volumes
   #   content {
