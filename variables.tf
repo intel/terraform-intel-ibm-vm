@@ -193,6 +193,7 @@ variable "boot_volume_auto_delete_volume" {
 variable "boot_volume_encryption" {
   type        = string
   description = "The type of encryption to use for the boot volume."
+  default     = null
 }
 
 variable "dedicated_host" {
@@ -222,7 +223,7 @@ variable "instance_template" {
 variable "access_tags" {
   type        = list(any)
   description = " A list of access management tags to attach to the instance."
-  default     = null
+  default     = []
 }
 
 variable "total_volume_bandwidth" {
@@ -237,8 +238,26 @@ variable "user_data" {
   default     = null
 }
 
-variable "volumes" {
-  type        = list(any)
-  description = "A comma separated list of volume IDs to attach to the instance."
+variable "existing_volume_ids" {
+  type        = list(string)
+  description = "A list of maps describing the volumes for each instance"
+  default     = []
+}
+
+variable "create_volume" {
+  type        = number
+  description = "If you want to create a volume, change from 0"
+  default     = 0
+}
+
+variable "volume_name" {
+  type        = string
+  description = "Name of the volume to create"
+  default     = null
+}
+
+variable "volume_profile" {
+  type        = string
+  description = "Profile to use for the volume"
   default     = null
 }
