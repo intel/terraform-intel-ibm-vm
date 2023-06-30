@@ -35,6 +35,17 @@ resource "ibm_is_security_group_rule" "allow_outbound" {
   }
 }
 
+resource "ibm_is_volume" "volume" {
+  count = var.create_volume == 0 ? length(var.existing_volume_ids) : var.create_volume 
+   name = var.volume_name
+   profile = var.volume_profile
+   zone = data.ibm_is_subnet.subnet.zone
+}
+
+################################################################################
+# Instance
+################################################################################
+
 resource "ibm_is_instance" "vpcinstance" {
   name           = var.name
   vpc            = var.vpc_id
@@ -47,15 +58,15 @@ resource "ibm_is_instance" "vpcinstance" {
   # If you want to pass user data to the instance upon creation this is the code to add that to your terraform script.
   #user_data = var.init_script != "" ? var.init_script : file("${path.module}/init-script-ubuntu.sh")
 
+  user_data                        = var.user_data
   access_tags                      = var.access_tags
   auto_delete_volume               = var.all_auto_delete_volume
   availability_policy_host_failure = var.availability_policy_host_failure
   instance_template                = var.instance_template
-  user_data                        = var.user_data
-
-  dedicated_host       = var.dedicated_host
-  dedicated_host_group = var.dedicated_host_group
-  placement_group      = var.placement_group
+  dedicated_host                   = var.dedicated_host
+  dedicated_host_group             = var.dedicated_host_group
+  placement_group                  = var.placement_group
+  total_volume_bandwidth           = var.total_volume_bandwidth
 
   primary_network_interface {
     name              = "eth1"
@@ -70,8 +81,20 @@ resource "ibm_is_instance" "vpcinstance" {
     delete = "15m"
   }
 
-  total_volume_bandwidth = var.total_volume_bandwidth
-  volumes                = [var.volumes]
+  volumes = var.create_volume ==0 ? var.existing_volume_ids : ibm_is_volume.volume.*.id
+
+ # volumes = var.volumes[]
+  # dynamic "volumes" {
+  #   for_each = var.volumes
+  #   content {
+  #     name           = lookup(volumes.value, "name", null)
+  #     profile        = lookup(volumes.value, "profile", null)
+  #     capacity       = lookup(volumes.value, "capacity", null)
+  #     iops           = lookup(volumes.value, "iops", null)
+  #     encryption_key = lookup(volumes.value, "encryption_key", null)
+  #   }
+  # }
+
 
   # Names the disk volume the same as the VM instance name
   boot_volume {
