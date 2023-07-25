@@ -196,6 +196,16 @@ variable "boot_volume_encryption" {
   default     = null
 }
 
+variable "additional_volumes" {
+  default = []
+  type    = list(object({
+    volume_name    = string
+    volume_profile = string
+    size           = number
+  }))
+}
+
+
 variable "dedicated_host" {
   type        = string
   description = "The placement restrictions to use the virtual server instance. Unique ID of the dedicated host where the instance id placed."
@@ -231,6 +241,7 @@ variable "total_volume_bandwidth" {
   description = "The amount of bandwidth (in megabits per second) allocated exclusively to instance storage volumes."
   default     = null
 }
+
 
 variable "user_data" {
   type        = string

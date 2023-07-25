@@ -35,17 +35,6 @@ resource "ibm_is_security_group_rule" "allow_outbound" {
   }
 }
 
-resource "ibm_is_volume" "volume" {
-  count   = var.create_volume == 0 ? length(var.existing_volume_ids) : var.create_volume
-  name    = var.volume_name
-  profile = var.volume_profile
-  zone    = data.ibm_is_subnet.subnet.zone
-}
-
-################################################################################
-# Instance
-################################################################################
-
 resource "ibm_is_instance" "vpcinstance" {
   name           = var.name
   vpc            = var.vpc_id
@@ -54,10 +43,8 @@ resource "ibm_is_instance" "vpcinstance" {
   image          = data.ibm_is_image.image.id
   keys           = var.ssh_key_ids
   resource_group = var.resource_group_id
-
   # If you want to pass user data to the instance upon creation this is the code to add that to your terraform script.
   #user_data = var.init_script != "" ? var.init_script : file("${path.module}/init-script-ubuntu.sh")
-
   user_data                        = var.user_data
   access_tags                      = var.access_tags
   auto_delete_volume               = var.all_auto_delete_volume
@@ -80,10 +67,7 @@ resource "ibm_is_instance" "vpcinstance" {
     update = "15m"
     delete = "15m"
   }
-
-  volumes = var.create_volume == 0 ? var.existing_volume_ids : ibm_is_volume.volume.*.id
-
-  # Names the disk volume the same as the VM instance name
+ # Names the disk volume the same as the VM instance name
   boot_volume {
     name               = "${var.name}-boot"
     auto_delete_volume = var.boot_volume_auto_delete_volume
@@ -92,9 +76,31 @@ resource "ibm_is_instance" "vpcinstance" {
     tags               = var.tags
 
   }
-
+  volumes = concat(
+    var.create_volume == 0 ? [] : ibm_is_volume.volume.*.id,
+    ibm_is_volume.additional_volumes.*.id,
+  )
   tags = var.tags
 }
+
+##########################################################
+#  INSTANCE DISK CONFIGURATION
+##########################################################
+
+resource "ibm_is_volume" "volume" {
+  count   = var.create_volume == 0 ? length(var.existing_volume_ids) : var.create_volume
+  name    = var.create_volume == 0 ? var.volume_name : "${var.name}-boot"
+  profile = var.create_volume == 0 ? var.volume_profile : "general-purpose"
+  zone    = data.ibm_is_subnet.subnet.zone
+}
+
+resource "ibm_is_volume" "additional_volumes" {
+  count   = length(var.additional_volumes)
+  name    = var.additional_volumes[count.index].volume_name
+  profile = var.additional_volumes[count.index].volume_profile
+  zone    = data.ibm_is_subnet.subnet.zone
+}
+
 
 #Assigns an IP to the network interface and names it with the instance name
 
