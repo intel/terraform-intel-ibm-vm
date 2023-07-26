@@ -180,7 +180,7 @@ variable "availability_policy_host_failure" {
 
 variable "boot_volume_size" {
   type        = number
-  description = "The size of the boot volume.(The capacity of the volume in gigabytes. This defaults to minimum capacity of the image and maximum to 250."
+  description = "The size of the boot volume.(The capacity of the volume in gigabytes. This defaults to 100gb capacity of the image and maximum to 250."
   default     = null
 }
 
@@ -195,6 +195,15 @@ variable "boot_volume_encryption" {
   description = "The type of encryption to use for the boot volume."
   default     = null
 }
+
+variable "volumes" {
+  default = []
+  type = list(object({
+    volume_profile = string
+    capacity       = number
+  }))
+}
+
 
 variable "dedicated_host" {
   type        = string
@@ -231,6 +240,7 @@ variable "total_volume_bandwidth" {
   description = "The amount of bandwidth (in megabits per second) allocated exclusively to instance storage volumes."
   default     = null
 }
+
 
 variable "user_data" {
   type        = string
