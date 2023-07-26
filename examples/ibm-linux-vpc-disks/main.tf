@@ -45,19 +45,18 @@ module "ibm_is_instance" {
   ssh_key_ids       = ["r006-7c2c713a-257d-4dcd-8882-7aa5b3f5ad3e"] #Existing SSH ID (seperate by commas if multiple)
   allow_ssh_from    = "134.134.139.84/32"                           #Security group inbound SSH CIDR Block (Adjust for your specific IP CIDR or IP)
   image_name        = "ibm-ubuntu-22-04-2-minimal-amd64-1"          #OS Image ID
-  additional_volumes = [
+  create_volume     = 2                                             #Enter how many additional disks you want to add to the instance
+  volumes = [
     {
-      volume_name    = "disk1"
-      volume_profile = "general-purpose"
-      size           = 10
+      volume_profile = "general-purpose"                            #Choose general-purpose
+      capacity       = 10
     },
     {
-      volume_name    = "disk2"
       volume_profile = "general-purpose"
-      size           = 11
+      capacity       = 11
     }
   ]
-  create_volume = 2
+
 }
 
 

@@ -180,7 +180,7 @@ variable "availability_policy_host_failure" {
 
 variable "boot_volume_size" {
   type        = number
-  description = "The size of the boot volume.(The capacity of the volume in gigabytes. This defaults to minimum capacity of the image and maximum to 250."
+  description = "The size of the boot volume.(The capacity of the volume in gigabytes. This defaults to 100gb capacity of the image and maximum to 250."
   default     = null
 }
 
@@ -196,12 +196,11 @@ variable "boot_volume_encryption" {
   default     = null
 }
 
-variable "additional_volumes" {
+variable "volumes" {
   default = []
-  type    = list(object({
-    volume_name    = string
+  type = list(object({
     volume_profile = string
-    size           = number
+    capacity       = number
   }))
 }
 
