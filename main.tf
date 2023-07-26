@@ -75,24 +75,14 @@ resource "ibm_is_instance" "vpcinstance" {
     size               = var.boot_volume_size
     tags               = var.tags
 
-  }
-  volumes = concat(
-    var.create_volume == 0 ? [] : ibm_is_volume.volume.*.id,
-    ibm_is_volume.additional_volumes.*.id,
-  )
+}
   tags = var.tags
 }
 
-##########################################################
-#  INSTANCE DISK CONFIGURATION
-##########################################################
 
-resource "ibm_is_volume" "volume" {
-  count   = var.create_volume == 0 ? length(var.existing_volume_ids) : var.create_volume
-  name    = var.create_volume == 0 ? var.volume_name : "${var.name}-boot"
-  profile = var.create_volume == 0 ? var.volume_profile : "general-purpose"
-  zone    = data.ibm_is_subnet.subnet.zone
-}
+##########################################################
+#  ADDITIONAL INSTANCE DISK CONFIGURATION
+##########################################################
 
 resource "ibm_is_volume" "additional_volumes" {
   count   = length(var.additional_volumes)
