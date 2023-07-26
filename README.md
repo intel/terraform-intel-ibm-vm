@@ -105,7 +105,7 @@ No modules.
 | [ibm_is_security_group_rule.allow_outbound](https://registry.terraform.io/providers/IBM-Cloud/ibm/latest/docs/resources/is_security_group_rule) | resource |
 | [ibm_is_security_group_rule.ssh_inbound](https://registry.terraform.io/providers/IBM-Cloud/ibm/latest/docs/resources/is_security_group_rule) | resource |
 | [ibm_is_security_group_rule.ssh_to_self_public_ip](https://registry.terraform.io/providers/IBM-Cloud/ibm/latest/docs/resources/is_security_group_rule) | resource |
-| [ibm_is_volume.volume](https://registry.terraform.io/providers/IBM-Cloud/ibm/latest/docs/resources/is_volume) | resource |
+| [ibm_is_volume.volumes](https://registry.terraform.io/providers/IBM-Cloud/ibm/latest/docs/resources/is_volume) | resource |
 | [ibm_is_image.image](https://registry.terraform.io/providers/IBM-Cloud/ibm/latest/docs/data-sources/is_image) | data source |
 | [ibm_is_subnet.subnet](https://registry.terraform.io/providers/IBM-Cloud/ibm/latest/docs/data-sources/is_subnet) | data source |
 
@@ -120,7 +120,7 @@ No modules.
 | <a name="input_availability_policy_host_failure"></a> [availability\_policy\_host\_failure](#input\_availability\_policy\_host\_failure) | The availability policy to use for this virtual server instance. The action to perform if the compute host experiences a failure. Supported values are restart and stop. | `string` | `null` | no |
 | <a name="input_boot_volume_auto_delete_volume"></a> [boot\_volume\_auto\_delete\_volume](#input\_boot\_volume\_auto\_delete\_volume) | If set to true, when deleting the instance the volume will also be deleted. | `string` | `null` | no |
 | <a name="input_boot_volume_encryption"></a> [boot\_volume\_encryption](#input\_boot\_volume\_encryption) | The type of encryption to use for the boot volume. | `string` | `null` | no |
-| <a name="input_boot_volume_size"></a> [boot\_volume\_size](#input\_boot\_volume\_size) | The size of the boot volume.(The capacity of the volume in gigabytes. This defaults to minimum capacity of the image and maximum to 250. | `number` | `null` | no |
+| <a name="input_boot_volume_size"></a> [boot\_volume\_size](#input\_boot\_volume\_size) | The size of the boot volume.(The capacity of the volume in gigabytes. This defaults to 100gb capacity of the image and maximum to 250. | `number` | `null` | no |
 | <a name="input_create_public_ip"></a> [create\_public\_ip](#input\_create\_public\_ip) | Set whether to allocate a public IP address for the instance | `bool` | `true` | no |
 | <a name="input_create_volume"></a> [create\_volume](#input\_create\_volume) | If you want to create a volume, change from 0 | `number` | `0` | no |
 | <a name="input_dedicated_host"></a> [dedicated\_host](#input\_dedicated\_host) | The placement restrictions to use the virtual server instance. Unique ID of the dedicated host where the instance id placed. | `string` | `null` | no |
@@ -142,6 +142,7 @@ No modules.
 | <a name="input_user_data"></a> [user\_data](#input\_user\_data) | User data to transfer to the instance. | `string` | `null` | no |
 | <a name="input_volume_name"></a> [volume\_name](#input\_volume\_name) | Name of the volume to create | `string` | `null` | no |
 | <a name="input_volume_profile"></a> [volume\_profile](#input\_volume\_profile) | Profile to use for the volume | `string` | `null` | no |
+| <a name="input_volumes"></a> [volumes](#input\_volumes) | n/a | <pre>list(object({<br>    volume_profile = string<br>    capacity       = number<br>  }))</pre> | `[]` | no |
 | <a name="input_vpc_id"></a> [vpc\_id](#input\_vpc\_id) | ID of the VPC where to create the instance | `string` | n/a | yes |
 
 ## Outputs
