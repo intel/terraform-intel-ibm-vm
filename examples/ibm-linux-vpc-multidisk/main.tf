@@ -3,7 +3,7 @@
 ########################
 
 # See policies.md, Intel recommends the 4th Generation Intel® Xeon® Platinum (Saphire Rapids) based instances.  At the time of the creation of the module only the 
-# 2nd Generation Intel® Xeon® Platinum (Cascade Lake) instances are available.
+# 2nd Generation Intel® Xeon® Platinum (Cascade Lake) instances are available in IBM Cloud.
 #
 # The policies.md will be updated when Saphire Rapids instances become available.
 #
@@ -38,13 +38,25 @@
 module "ibm_is_instance" {
   source            = "../../"
   name              = "vm01"                                        #The name you want to give the instance you are creating
-  profile_name      = "cx2-2x4"                                     #Latest Intel Xeon processor available for the Instance Profile
+  profile_name      = "cx2-2x4"                                     #Latest Intel Xeon processor available for the Instance Profile 
   resource_group_id = "0d2599fc021c4bc19e8a330fd8286dbd"            #Existing RG ID
   vpc_id            = "r006-df129de8-bde1-4cda-932c-32e9cdd2e7c7"   #Existing VPC ID
   subnet_id         = "0717-80ebe088-c5e7-4964-a4b9-ebb6acec6dcc"   #Existing Subnet ID
-  ssh_key_ids       = ["r006-7c2c713a-257d-4dcd-8882-7aa5b3f5ad3e"] #Security group inbound SSH CIDR Block (Adjust for your specific IP CIDR or IP that you want SSH access from)
-  allow_ssh_from    = "134.134.139.84/32"                           #Security group inbound SSH CIDR Block (Adjust for your specific IP CIDR or IP)
+  ssh_key_ids       = ["r006-7c2c713a-257d-4dcd-8882-7aa5b3f5ad3e"] #Existing SSH ID (seperate by commas if multiple)
+  allow_ssh_from    = "134.134.139.84/32"                           #Security group inbound SSH CIDR Block (Adjust for your specific IP CIDR or IP that you want SSH access from)
   image_name        = "ibm-ubuntu-22-04-2-minimal-amd64-1"          #OS Image ID
+  create_volume     = 2                                             #Enter how many additional disks you want to add to the instance
+  volumes = [
+    {
+      volume_profile = "general-purpose"                            #Choose "general-purpose", "10iops-tier", "custom" repeat for each number of create_volumes you entered above
+      capacity       = 10
+    },
+    {
+      volume_profile = "general-purpose"
+      capacity       = 11
+    }
+  ]
+
 }
 
 
