@@ -39,13 +39,6 @@ resource "ibm_is_security_group_rule" "allow_outbound" {
 #  ADDITIONAL INSTANCE DISK CONFIGURATION
 ##########################################################
 
-# resource "ibm_is_volume" "additional_volumes" {
-#   count   = length(var.additional_volumes)
-#   name    = var.additional_volumes[count.index].volume_name
-#   profile = var.additional_volumes[count.index].volume_profile
-#   zone    = data.ibm_is_subnet.subnet.zone
-# }
-
 resource "ibm_is_volume" "volumes" {
     count = length(var.volumes)
     name = "${var.name}-vol-${count.index}"
@@ -54,13 +47,6 @@ resource "ibm_is_volume" "volumes" {
     zone    = data.ibm_is_subnet.subnet.zone
     capacity = var.volumes[count.index]["capacity"]
         
-    # # Optional Encryption Key
-    # encryption_key = contains(
-    #     keys(var.volumes[count.index % local.volumes_length]),
-    #     "encryption_key"
-    # ) ? lookup(var.volumes[count.index % local.volumes_length], "encryption_key") : null
-
-    # Optional Tags
     tags = var.tags
     
 }
@@ -106,25 +92,7 @@ resource "ibm_is_instance" "vpcinstance" {
     tags               = var.tags
   }
   
-  #volumes = length(var.volumes) > 0 ? ibm_is_volume.volumes : null
-  
   volumes = length(var.volumes) > 0 ? [for vol in ibm_is_volume.volumes : vol.id] : null
-
-  # # Additional volumes
-  # dynamic "volume_attachments" {
-  #   for_each = var.additional_volumes
-  #   content {
-  #     volume_id = volume_attachments.ids
-  #   #delete_volume_on_instance_delete = true
-  #   }
-  # }
-
-  # # Additional volumes
-  # count = length(var.additional_volumes)
-  # volume_attachments {
-  #   volume_id = var.additional_volumes[count.index]
-  #   delete_volume_on_instance_delete = true
-  # }
 
   tags = var.tags
 

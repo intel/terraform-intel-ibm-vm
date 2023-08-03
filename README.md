@@ -6,7 +6,7 @@
 
 # Intel® Cloud Optimization Modules for Terraform
 
-© Copyright 2022, Intel Corporation
+© Copyright 2023, Intel Corporation
 
 ## IBM VPC Compute Instance
 This module provides the functionality to ensure that you are utilizing Intel's latest generation processor in the creation of a virtual machine in IBM Cloud in a VPC.
@@ -19,6 +19,7 @@ This module provides the functionality to ensure that you are utilizing Intel's 
 
 
 <center>
+Coming soon...
 
 #### [4th Gen Intel® Xeon® Scalable Processor (Sapphire Rapids)](https://www.intel.com/content/www/us/en/newsroom/news/4th-gen-intel-xeon-outperforms-competition-real-world-workloads.html)
 
@@ -29,19 +30,25 @@ This module provides the functionality to ensure that you are utilizing Intel's 
 
 ## Usage
 
-See examples folder for code ./examples/intel-ibm-linux-vpc
+See examples folder for code:
+* Single Instance created in existing VPC -  ./examples/intel-ibm-linux-vpc
+* Single Instances with multiple data disks in existing VPC - ./examples/intel-ibm-linux-vpc-multidisk
 
-Example of main.tf
+
 #
 This module is designed to allow you to provision a virtual machine in an existing IBM cloud account where you have a VPC created.  You will need to provide several variables to specify certain settings.  These settings include:
 #
 Required Variables:
 * <b>region</b> = name of the IBM Cloud region you want to use
 * <b>name</b> = (This is the VM name, and it will also be used in the name of the Security Group that gets created)
+* <b>profile_name</b> = Instance size and family
 * <b>resource_group_id</b> = This is the unique ID of the IBM cloud resource group that you want to use.
 * <b>vpc_id</b> = The unique ID of the VPC that you want to use.
 * <b>subnet_id</b> = The unique ID of the subnet that you want to use.
 * <b>ssh_key_ids</b> = List of the unique SSH Key ID's that you want to add to the instance once it is created.  Seperate ID's with commas to add more than one to the Instance.
+* <b>allow_ssh_from</b> = IP Address that you want to allow SSH access to your instance's public ip address.  Security best practices is to not allow 0.0.0.0/0 and specify your ip or range of ip addresses.
+* <b>image_name</b> = This will be the OS image that you want to use for your instance.
+
 #
 Example of how to pass variable :
 ```hcl

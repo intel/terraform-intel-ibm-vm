@@ -4,7 +4,7 @@
 
 # Intel Cloud Optimization Modules for Terraform
 
-© Copyright 2022, Intel Corporation
+© Copyright 2023, Intel Corporation
 
 ## Terraform Intel IBM VM - Linux VM in VPC
 
@@ -21,10 +21,24 @@ This example also requires that you provide the SSH Key as a variable. It associ
 Required Variables:
 * <b>region</b> = name of the IBM Cloud region you want to use
 * <b>name</b> = (This is the VM name, and it will also be used in the name of the Security Group that gets created)
+* <b>profile_name</b> = Instance size and family
 * <b>resource_group_id</b> = This is the unique ID of the IBM cloud resource group that you want to use.
 * <b>vpc_id</b> = The unique ID of the VPC that you want to use.
 * <b>subnet_id</b> = The unique ID of the subnet that you want to use.
 * <b>ssh_key_ids</b> = List of the unique SSH Key ID's that you want to add to the instance once it is created.  Seperate ID's with commas to add more than one to the Instance.
+* <b>allow_ssh_from</b> = IP Address that you want to allow SSH access to your instance's public ip address.  Security best practices is to not allow 0.0.0.0/0 and specify your ip or range of ip addresses.
+* <b>image_name</b> = This will be the OS image that you want to use for your instance.
+* <b>create_volume</b> = This is the number of additional Data disks that you want to add to your instance during creation
+* <b>volumes</b> = You will need to add Volume_profile and Capacity variables in order to define the type of volume you want to add as well as size.  You will want to match the number that you selected as part of the create_volume variable.<br>
+<b>Notes:</b>
+    * Changing the profile_name to a larger or smaller size instance in the same family will stop the instance, modify the size, and turn it back on. (eg. cx2-2x4 to cx2-<b>4</b>x<b>8</b>)
+    * Changing the profile_name to a <b>DIFFERENT</b> family will <b>DESTROY</b> the instance and recreate with a new instance.
+    * Capacity variable only supports expansion of the volumes.  If you build your module using 20 and then change to 50 it will expand the volume without destroying it.  
+      However you <i><b>cannot reduce the size</i></b>.
+    * If you want to add a 2nd or 3rd volume post deployment you can just change the create_volume number and add in a <i>capacity</i> and <i>volume_profile</i> entry to match and it will create a new volume.
+    * If you remove a volume from the list, it will delete the volume and it will rename the volumes that remain.
+    * If you change the VM name, the additional volumes will change as well, however the boot volume name will not change it will remain the original name (server-boot)
+
 
 <b>Example of variables.tf</b>
 * Enter the region you want to use here

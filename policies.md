@@ -4,7 +4,7 @@
 
 # Intel® Cloud Optimization Modules for Terraform  
 
-© Copyright 2022, Intel Corporation
+© Copyright 2023, Intel Corporation
 
 ## HashiCorp Sentinel Policies
 
@@ -12,7 +12,7 @@ This file documents the HashiCorp Sentinel policies that apply to this module
 
 ## Policy 1
 
-Description: The configured "profile_name" should be Intel Xeon 2nd Generation(code-named Cascade Lake) Scalable processors and Intel Xeon 4rd Generation(code-named Saphire Rapids).
+Description: The configured "profile_name" should be Intel Xeon 2nd Generation(code-named Cascade Lake) Scalable processors or Intel Xeon 4th Generation(code-named Saphire Rapids).
 
 Resource type: ibm_is_instance
 
