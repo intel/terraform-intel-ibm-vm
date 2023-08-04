@@ -138,11 +138,11 @@ No modules.
 | <a name="input_instance_template"></a> [instance\_template](#input\_instance\_template) | ID of the instance template to create the instance from. | `string` | `null` | no |
 | <a name="input_name"></a> [name](#input\_name) | Name of the instance | `string` | `"vm01"` | no |
 | <a name="input_placement_group"></a> [placement\_group](#input\_placement\_group) | Unique Identifier of the Placement Group for restricting the placement of the instance. | `string` | `null` | no |
-| <a name="input_profile_name"></a> [profile\_name](#input\_profile\_name) | Instance profile for an Intel based Xeon Processor to use for the instance | `string` | n/a | yes |
+| <a name="input_profile_name"></a> [profile\_name](#input\_profile\_name) | Instance profile for an Intel based Xeon Processor size and family to use for the instance | `string` | n/a | yes |
 | <a name="input_region"></a> [region](#input\_region) | The region where the resources will be created. | `string` | `"us-south"` | no |
 | <a name="input_resource_group_id"></a> [resource\_group\_id](#input\_resource\_group\_id) | ID of the resource group that has the VPC, SSH key, etc. | `string` | n/a | yes |
 | <a name="input_security_group_rules"></a> [security\_group\_rules](#input\_security\_group\_rules) | List of security group rules to set on the new security group created, in addition to the SSH rules | `list` | <pre>[<br>  {<br>    "direction": "outbound",<br>    "icmp": {<br>      "type": 8<br>    },<br>    "name": "icmp_outbound",<br>    "remote": "0.0.0.0/0"<br>  }<br>]</pre> | no |
-| <a name="input_ssh_key_ids"></a> [ssh\_key\_ids](#input\_ssh\_key\_ids) | List of SSH key IDs to inject into the instance.  This is not the public key itself, but just the key's IBM ID | `list(string)` | n/a | yes |
+| <a name="input_ssh_key_ids"></a> [ssh\_key\_ids](#input\_ssh\_key\_ids) | List of SSH key IDs to inject into the instance.  This is not the public key guid itself, but just the key's IBM ID | `list(string)` | n/a | yes |
 | <a name="input_subnet_id"></a> [subnet\_id](#input\_subnet\_id) | ID of the subnet in the VPC where to create the instance | `string` | n/a | yes |
 | <a name="input_tags"></a> [tags](#input\_tags) | List of tags to add on all created resources | `list(string)` | `[]` | no |
 | <a name="input_total_volume_bandwidth"></a> [total\_volume\_bandwidth](#input\_total\_volume\_bandwidth) | The amount of bandwidth (in megabits per second) allocated exclusively to instance storage volumes. | `number` | `null` | no |
