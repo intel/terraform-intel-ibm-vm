@@ -4,7 +4,7 @@
 
 # Intel Cloud Optimization Modules for Terraform
 
-© Copyright 2022, Intel Corporation
+© Copyright 2023, Intel Corporation
 
 ## Terraform Intel IBM VM - Linux VM in VPC
 
@@ -21,10 +21,13 @@ This example also requires that you provide the SSH Key as a variable. It associ
 Required Variables:
 * <b>region</b> = name of the IBM Cloud region you want to use
 * <b>name</b> = (This is the VM name, and it will also be used in the name of the Security Group that gets created)
+* <b>profile_name</b> = Instance size and family
 * <b>resource_group_id</b> = This is the unique ID of the IBM cloud resource group that you want to use.
 * <b>vpc_id</b> = The unique ID of the VPC that you want to use.
 * <b>subnet_id</b> = The unique ID of the subnet that you want to use.
 * <b>ssh_key_ids</b> = List of the unique SSH Key ID's that you want to add to the instance once it is created.  Seperate ID's with commas to add more than one to the Instance.
+* <b>allow_ssh_from</b> = IP Address that you want to allow SSH access to your instance's public ip address.  Security best practices is to not allow 0.0.0.0/0 and specify your ip or range of ip addresses.
+* <b>image_name</b> = This will be the OS image that you want to use for your instance.
 
 <b>Example of variables.tf</b>
 * Enter the region you want to use here

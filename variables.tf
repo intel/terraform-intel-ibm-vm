@@ -5,7 +5,7 @@
 # See policies.md, Intel recommends the 4th Generation Intel® Xeon® Platinum (Saphire Rapids) based instances.  At the time of the creation of the module only the 
 # 2nd Generation Intel® Xeon® Platinum (Cascade Lake) instances are available.
 #
-# The policies.md will be updated when Saphire Rapids instances become available.
+# The policies.md will be updated when Saphire Rapids instances become available in IBM Cloud.
 #
 # Balanced Optimized:
 #  bx2-2x8,bx2d-2x8,bx2-4x16,bx2d-4x16,bx2-8x32,bx2d-8x32,bx2-16x64,bx2d-16x64,bx2-32x128,bx2d-32x128,bx2-48x192,bx2d-48x192,bx2-64x256,bx2d-64x256,bx2-96x384,,bx2d-96x384,bx2-128x512,bx2d-128x512
@@ -69,7 +69,7 @@ variable "subnet_id" {
 
 variable "ssh_key_ids" {
   type        = list(string)
-  description = "List of SSH key IDs to inject into the instance.  This is not the public key itself, but just the key's IBM ID"
+  description = "List of SSH key IDs to inject into the instance.  This is not the public key guid itself, but just the key's IBM ID"
 
 }
 
@@ -91,7 +91,7 @@ variable "init_script" {
 
 variable "profile_name" {
   type        = string
-  description = "Instance profile for an Intel based Xeon Processor to use for the instance"
+  description = "Instance profile for an Intel based Xeon Processor size and family to use for the instance"
 }
 
 variable "create_public_ip" {
@@ -102,7 +102,6 @@ variable "create_public_ip" {
 }
 
 # Security Group Created allows inbound SSH from 0.0.0.0/0
-
 
 variable "allow_ssh_from" {
   type        = string
@@ -197,13 +196,13 @@ variable "boot_volume_encryption" {
 }
 
 variable "volumes" {
-  default = []
+  default = []  
   type = list(object({
     volume_profile = string
     capacity       = number
   }))
 }
-
+# See the ibm-linux-vpc-multidisk in the examples folder to see how to leverage these
 
 variable "dedicated_host" {
   type        = string

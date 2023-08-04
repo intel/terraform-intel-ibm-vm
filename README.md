@@ -6,7 +6,7 @@
 
 # Intel® Cloud Optimization Modules for Terraform
 
-© Copyright 2022, Intel Corporation
+© Copyright 2023, Intel Corporation
 
 ## IBM VPC Compute Instance
 This module provides the functionality to ensure that you are utilizing Intel's latest generation processor in the creation of a virtual machine in IBM Cloud in a VPC.
@@ -19,6 +19,7 @@ This module provides the functionality to ensure that you are utilizing Intel's 
 
 
 <center>
+Coming soon...
 
 #### [4th Gen Intel® Xeon® Scalable Processor (Sapphire Rapids)](https://www.intel.com/content/www/us/en/newsroom/news/4th-gen-intel-xeon-outperforms-competition-real-world-workloads.html)
 
@@ -29,19 +30,25 @@ This module provides the functionality to ensure that you are utilizing Intel's 
 
 ## Usage
 
-See examples folder for code ./examples/intel-ibm-linux-vpc
+See examples folder for code:
+* Single Instance created in existing VPC -  ./examples/intel-ibm-linux-vpc
+* Single Instances with multiple data disks in existing VPC - ./examples/intel-ibm-linux-vpc-multidisk
 
-Example of main.tf
+
 #
 This module is designed to allow you to provision a virtual machine in an existing IBM cloud account where you have a VPC created.  You will need to provide several variables to specify certain settings.  These settings include:
 #
 Required Variables:
 * <b>region</b> = name of the IBM Cloud region you want to use
 * <b>name</b> = (This is the VM name, and it will also be used in the name of the Security Group that gets created)
+* <b>profile_name</b> = Instance size and family
 * <b>resource_group_id</b> = This is the unique ID of the IBM cloud resource group that you want to use.
 * <b>vpc_id</b> = The unique ID of the VPC that you want to use.
 * <b>subnet_id</b> = The unique ID of the subnet that you want to use.
 * <b>ssh_key_ids</b> = List of the unique SSH Key ID's that you want to add to the instance once it is created.  Seperate ID's with commas to add more than one to the Instance.
+* <b>allow_ssh_from</b> = IP Address that you want to allow SSH access to your instance's public ip address.  Security best practices is to not allow 0.0.0.0/0 and specify your ip or range of ip addresses.
+* <b>image_name</b> = This will be the OS image that you want to use for your instance.
+
 #
 Example of how to pass variable :
 ```hcl
@@ -131,11 +138,11 @@ No modules.
 | <a name="input_instance_template"></a> [instance\_template](#input\_instance\_template) | ID of the instance template to create the instance from. | `string` | `null` | no |
 | <a name="input_name"></a> [name](#input\_name) | Name of the instance | `string` | `"vm01"` | no |
 | <a name="input_placement_group"></a> [placement\_group](#input\_placement\_group) | Unique Identifier of the Placement Group for restricting the placement of the instance. | `string` | `null` | no |
-| <a name="input_profile_name"></a> [profile\_name](#input\_profile\_name) | Instance profile for an Intel based Xeon Processor to use for the instance | `string` | n/a | yes |
+| <a name="input_profile_name"></a> [profile\_name](#input\_profile\_name) | Instance profile for an Intel based Xeon Processor size and family to use for the instance | `string` | n/a | yes |
 | <a name="input_region"></a> [region](#input\_region) | The region where the resources will be created. | `string` | `"us-south"` | no |
 | <a name="input_resource_group_id"></a> [resource\_group\_id](#input\_resource\_group\_id) | ID of the resource group that has the VPC, SSH key, etc. | `string` | n/a | yes |
 | <a name="input_security_group_rules"></a> [security\_group\_rules](#input\_security\_group\_rules) | List of security group rules to set on the new security group created, in addition to the SSH rules | `list` | <pre>[<br>  {<br>    "direction": "outbound",<br>    "icmp": {<br>      "type": 8<br>    },<br>    "name": "icmp_outbound",<br>    "remote": "0.0.0.0/0"<br>  }<br>]</pre> | no |
-| <a name="input_ssh_key_ids"></a> [ssh\_key\_ids](#input\_ssh\_key\_ids) | List of SSH key IDs to inject into the instance.  This is not the public key itself, but just the key's IBM ID | `list(string)` | n/a | yes |
+| <a name="input_ssh_key_ids"></a> [ssh\_key\_ids](#input\_ssh\_key\_ids) | List of SSH key IDs to inject into the instance.  This is not the public key guid itself, but just the key's IBM ID | `list(string)` | n/a | yes |
 | <a name="input_subnet_id"></a> [subnet\_id](#input\_subnet\_id) | ID of the subnet in the VPC where to create the instance | `string` | n/a | yes |
 | <a name="input_tags"></a> [tags](#input\_tags) | List of tags to add on all created resources | `list(string)` | `[]` | no |
 | <a name="input_total_volume_bandwidth"></a> [total\_volume\_bandwidth](#input\_total\_volume\_bandwidth) | The amount of bandwidth (in megabits per second) allocated exclusively to instance storage volumes. | `number` | `null` | no |
