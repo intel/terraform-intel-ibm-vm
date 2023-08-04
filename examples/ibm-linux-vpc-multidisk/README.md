@@ -4,6 +4,7 @@
 
 # Intel Cloud Optimization Modules for Terraform
 
+
 © Copyright 2023, Intel Corporation
 
 ## Terraform Intel IBM VM - Linux VM in VPC

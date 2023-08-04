@@ -46,7 +46,6 @@ resource "ibm_is_volume" "volumes" {
     profile = var.volumes[count.index]["volume_profile"]
     zone    = data.ibm_is_subnet.subnet.zone
     capacity = var.volumes[count.index]["capacity"]
-        
     tags = var.tags
     
 }
@@ -92,8 +91,8 @@ resource "ibm_is_instance" "vpcinstance" {
     tags               = var.tags
   }
   
-  volumes = length(var.volumes) > 0 ? [for vol in ibm_is_volume.volumes : vol.id] : null
 
+  volumes = length(var.volumes) > 0 ? [for vol in ibm_is_volume.volumes : vol.id] : null
   tags = var.tags
 
 }
