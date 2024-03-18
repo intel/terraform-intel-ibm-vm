@@ -9,7 +9,7 @@
 
 ## Terraform Intel IBM VM - Linux VM in VPC
 
-This example creates an IBM virtual instance on Intel Cascade Lake CPU on a Linux Operating System in a VPC you specify. The VPC id has to be passed in this module as a variable. This module is configured to create the VM instance in US-South region. The region can also be modified via the variables.tf.
+This example creates an IBM virtual instance on Intel's 4th Generation Intel® Xeon® Scalable processor on Linux Operating System in a VPC you specify. The VPC id has to be passed in this module as a variable. It is configured to create the VM instance in US-South region. The region can also be modified via the variables.tf.
 
 This example also requires that you provide the SSH Key as a variable. It associates the ssh key with the VM instance. This module also creates a new scurity group and assigns it to the VM instance with the SSH port 22 open so you can connect. This module assigns a public IP by default but that is also a variable setting you can modify if desired.
 

@@ -11,6 +11,8 @@
 ## IBM VPC Compute Instance
 This module provides the functionality to ensure that you are utilizing Intel's latest generation processor in the creation of a virtual machine in IBM Cloud in a VPC.
 
+This Optimized Cloud Module leverages Intel's 4th Generation Intel® Xeon® Scalable processors, the Intel 8474C processor (previously code named Sapphire Rapids).  This is IBM's 3rd generation profile labeled with the bx3d, cx3d, andmx3d prefixes.  These are available in the Dallas, London, and Frankfurt regions as of 3/18/2024.  See https://cloud.ibm.com/docs/vpc?topic=vpc-profiles&interface=ui for availability updates.
+
 ## Performance Data
 
 #### Find all the information below plus even more by navigating our full library
@@ -19,7 +21,7 @@ This module provides the functionality to ensure that you are utilizing Intel's 
 
 
 <center>
-Coming soon...
+
 
 #### [4th Gen Intel® Xeon® Scalable Processor (Sapphire Rapids)](https://www.intel.com/content/www/us/en/newsroom/news/4th-gen-intel-xeon-outperforms-competition-real-world-workloads.html)
 
