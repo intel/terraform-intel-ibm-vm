@@ -34,13 +34,13 @@
 module "ibm_is_instance" {
   source            = "intel/ibm-vm/intel"
   name              = "vm01"                                   #The name you want to give the instance you are creating
-  resource_group_id = "<YOUR ID HERE>"                         #Existing RG ID
-  vpc_id            = "<YOUR ID HERE>"                         #Existing VPC ID
-  subnet_id         = "<YOUR ID HERE>"                         #Existing Subnet ID
-  ssh_key_ids       = ["<YOUR ID HERE>"]                       #Security group inbound SSH CIDR Block (Adjust for your specific IP CIDR or IP that you want SSH access from)
+  resource_group_id = "<YOUR ID HERE>"                         #Existing RG ID: Example "0d2588fd021c4ac19e8a220fe8245dbd"
+  vpc_id            = "<YOUR ID HERE>"                         #Existing VPC ID: Example "r006-df145de5-bdg1-4add-933c-32e6ces2e7c7"
+  subnet_id         = "<YOUR ID HERE>"                         #Existing Subnet ID: Example "0227-4c477cag-b7w7-4243-a38c-dd33e2e3c803"
+  ssh_key_ids       = ["<YOUR ID HERE>"]                       #SSH Key ID that you created: Example "r006-1b2bfdde-cb3a-457f-b9e9-08774d049b42"
   allow_ssh_from    = "<YOUR IP HERE - example 53.3.58.49/32>" #Security group inbound SSH CIDR Block (Adjust for your specific IP CIDR or IP)
   image_name        = "ibm-ubuntu-22-04-2-minimal-amd64-1"     #OS Image ID
-
+  
   # Example shows you how to add Additional Disk Volume to your IBM VM running on 4th Gen Xeon Scalable Processor by default
   create_volume = 2 #Enter how many additional disks you want to add to the instance
   volumes = [
@@ -53,7 +53,7 @@ module "ibm_is_instance" {
       capacity       = 11
     }
   ]
-
 }
+
 
 
