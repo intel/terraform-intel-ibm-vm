@@ -11,6 +11,8 @@
 ## IBM VPC Compute Instance
 This module provides the functionality to ensure that you are utilizing Intel's latest generation processor in the creation of a virtual machine in IBM Cloud in a VPC.
 
+This Optimized Cloud Module leverages Intel's 4th Generation Intel® Xeon® Scalable processors, the Intel 8474C processor (previously code named Sapphire Rapids).  This is IBM's 3rd generation profile labeled with the bx3d, cx3d, andmx3d prefixes.  These are available in the Dallas, London, and Frankfurt regions as of 3/18/2024.  See https://cloud.ibm.com/docs/vpc?topic=vpc-profiles&interface=ui for availability updates.
+
 ## Performance Data
 
 #### Find all the information below plus even more by navigating our full library
@@ -19,7 +21,7 @@ This module provides the functionality to ensure that you are utilizing Intel's 
 
 
 <center>
-Coming soon...
+
 
 #### [4th Gen Intel® Xeon® Scalable Processor (Sapphire Rapids)](https://www.intel.com/content/www/us/en/newsroom/news/4th-gen-intel-xeon-outperforms-competition-real-world-workloads.html)
 
@@ -102,19 +104,19 @@ No modules.
 
 | Name | Type |
 |------|------|
-| [ibm_is_floating_ip.vpcinstance](https://registry.terraform.io/providers/IBM-Cloud/ibm/latest/docs/resources/is_floating_ip) | resource |
-| [ibm_is_instance.vpcinstance](https://registry.terraform.io/providers/IBM-Cloud/ibm/latest/docs/resources/is_instance) | resource |
-| [ibm_is_security_group.vpcinstance](https://registry.terraform.io/providers/IBM-Cloud/ibm/latest/docs/resources/is_security_group) | resource |
-| [ibm_is_security_group_rule.additional_all_rules](https://registry.terraform.io/providers/IBM-Cloud/ibm/latest/docs/resources/is_security_group_rule) | resource |
-| [ibm_is_security_group_rule.additional_icmp_rules](https://registry.terraform.io/providers/IBM-Cloud/ibm/latest/docs/resources/is_security_group_rule) | resource |
-| [ibm_is_security_group_rule.additional_tcp_rules](https://registry.terraform.io/providers/IBM-Cloud/ibm/latest/docs/resources/is_security_group_rule) | resource |
-| [ibm_is_security_group_rule.additional_udp_rules](https://registry.terraform.io/providers/IBM-Cloud/ibm/latest/docs/resources/is_security_group_rule) | resource |
-| [ibm_is_security_group_rule.allow_outbound](https://registry.terraform.io/providers/IBM-Cloud/ibm/latest/docs/resources/is_security_group_rule) | resource |
-| [ibm_is_security_group_rule.ssh_inbound](https://registry.terraform.io/providers/IBM-Cloud/ibm/latest/docs/resources/is_security_group_rule) | resource |
-| [ibm_is_security_group_rule.ssh_to_self_public_ip](https://registry.terraform.io/providers/IBM-Cloud/ibm/latest/docs/resources/is_security_group_rule) | resource |
-| [ibm_is_volume.volumes](https://registry.terraform.io/providers/IBM-Cloud/ibm/latest/docs/resources/is_volume) | resource |
-| [ibm_is_image.image](https://registry.terraform.io/providers/IBM-Cloud/ibm/latest/docs/data-sources/is_image) | data source |
-| [ibm_is_subnet.subnet](https://registry.terraform.io/providers/IBM-Cloud/ibm/latest/docs/data-sources/is_subnet) | data source |
+| [ibm_is_floating_ip.vpcinstance](https://registry.terraform.io/providers/IBM-cloud/ibm/latest/docs/resources/is_floating_ip) | resource |
+| [ibm_is_instance.vpcinstance](https://registry.terraform.io/providers/IBM-cloud/ibm/latest/docs/resources/is_instance) | resource |
+| [ibm_is_security_group.vpcinstance](https://registry.terraform.io/providers/IBM-cloud/ibm/latest/docs/resources/is_security_group) | resource |
+| [ibm_is_security_group_rule.additional_all_rules](https://registry.terraform.io/providers/IBM-cloud/ibm/latest/docs/resources/is_security_group_rule) | resource |
+| [ibm_is_security_group_rule.additional_icmp_rules](https://registry.terraform.io/providers/IBM-cloud/ibm/latest/docs/resources/is_security_group_rule) | resource |
+| [ibm_is_security_group_rule.additional_tcp_rules](https://registry.terraform.io/providers/IBM-cloud/ibm/latest/docs/resources/is_security_group_rule) | resource |
+| [ibm_is_security_group_rule.additional_udp_rules](https://registry.terraform.io/providers/IBM-cloud/ibm/latest/docs/resources/is_security_group_rule) | resource |
+| [ibm_is_security_group_rule.allow_outbound](https://registry.terraform.io/providers/IBM-cloud/ibm/latest/docs/resources/is_security_group_rule) | resource |
+| [ibm_is_security_group_rule.ssh_inbound](https://registry.terraform.io/providers/IBM-cloud/ibm/latest/docs/resources/is_security_group_rule) | resource |
+| [ibm_is_security_group_rule.ssh_to_self_public_ip](https://registry.terraform.io/providers/IBM-cloud/ibm/latest/docs/resources/is_security_group_rule) | resource |
+| [ibm_is_volume.volumes](https://registry.terraform.io/providers/IBM-cloud/ibm/latest/docs/resources/is_volume) | resource |
+| [ibm_is_image.image](https://registry.terraform.io/providers/IBM-cloud/ibm/latest/docs/data-sources/is_image) | data source |
+| [ibm_is_subnet.subnet](https://registry.terraform.io/providers/IBM-cloud/ibm/latest/docs/data-sources/is_subnet) | data source |
 
 ## Inputs
 
@@ -138,7 +140,7 @@ No modules.
 | <a name="input_instance_template"></a> [instance\_template](#input\_instance\_template) | ID of the instance template to create the instance from. | `string` | `null` | no |
 | <a name="input_name"></a> [name](#input\_name) | Name of the instance | `string` | `"vm01"` | no |
 | <a name="input_placement_group"></a> [placement\_group](#input\_placement\_group) | Unique Identifier of the Placement Group for restricting the placement of the instance. | `string` | `null` | no |
-| <a name="input_profile_name"></a> [profile\_name](#input\_profile\_name) | Instance profile for an Intel based Xeon Processor size and family to use for the instance | `string` | n/a | yes |
+| <a name="input_profile_name"></a> [profile\_name](#input\_profile\_name) | Instance profile for an Intel based Xeon Processor size and family to use for the instance | `string` | `"bx3d-2x10"` | no |
 | <a name="input_region"></a> [region](#input\_region) | The region where the resources will be created. | `string` | `"us-south"` | no |
 | <a name="input_resource_group_id"></a> [resource\_group\_id](#input\_resource\_group\_id) | ID of the resource group that has the VPC, SSH key, etc. | `string` | n/a | yes |
 | <a name="input_security_group_rules"></a> [security\_group\_rules](#input\_security\_group\_rules) | List of security group rules to set on the new security group created, in addition to the SSH rules | `list` | <pre>[<br>  {<br>    "direction": "outbound",<br>    "icmp": {<br>      "type": 8<br>    },<br>    "name": "icmp_outbound",<br>    "remote": "0.0.0.0/0"<br>  }<br>]</pre> | no |
