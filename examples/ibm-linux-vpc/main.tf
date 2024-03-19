@@ -21,12 +21,13 @@
 # gx2-8x64x1v100,gx2-16x128x2v100,gx2-32x256x2v100
 
 ## Links
-https://cloud.ibm.com/docs/vpc?topic=vpc-profiles&interface=ui
+#https://cloud.ibm.com/docs/vpc?topic=vpc-profiles&interface=ui
 
 ########################
 
 # This module was created with the assumption that you have some infrastructure in place and you want to automate an Virtual server in an existing account/network.
 # Assumptions:
+#    Check the provider.tf to make sure your IBM API Key for your Cloud Subscription is passed correctly
 #    VPC Exists in a Region
 #    Subnet(s) Exists in the VPC
 #    Resource Group Exist in the IBM Cloud Account
@@ -34,14 +35,11 @@ https://cloud.ibm.com/docs/vpc?topic=vpc-profiles&interface=ui
 
 module "ibm_is_instance" {
   source            = "intel/ibm-vm/intel"
-  name              = "vm01"                                        #The name you want to give the instance you are creating
-  profile_name      = "bx3d-2x10"                                     #Latest Intel Xeon processor available for the Instance Profile
-  resource_group_id = "<YOUR ID HERE>"                              #Existing RG ID
-  vpc_id            = "<YOUR ID HERE>"                              #Existing VPC ID
-  subnet_id         = "<YOUR ID HERE>"                              #Existing Subnet ID
-  ssh_key_ids       = ["<YOUR ID HERE>"]                            #Security group inbound SSH CIDR Block (Adjust for your specific IP CIDR or IP that you want SSH access from)
-  allow_ssh_from    = "<YOUR IP HERE - example 53.3.58.49/32>"      #Security group inbound SSH CIDR Block (Adjust for your specific IP CIDR or IP)
-  image_name        = "ibm-ubuntu-22-04-2-minimal-amd64-1"          #OS Image ID
+  name              = "vm01"                                   #The name you want to give the instance you are creating
+  resource_group_id = "<YOUR ID HERE>"                         #Existing RG ID
+  vpc_id            = "<YOUR ID HERE>"                         #Existing VPC ID
+  subnet_id         = "<YOUR ID HERE>"                         #Existing Subnet ID
+  ssh_key_ids       = ["<YOUR ID HERE>"]                       #Security group inbound SSH CIDR Block (Adjust for your specific IP CIDR or IP that you want SSH access from)
+  allow_ssh_from    = "<YOUR IP HERE - example 53.3.58.49/32>" #Security group inbound SSH CIDR Block (Adjust for your specific IP CIDR or IP)
+  image_name        = "ibm-ubuntu-22-04-2-minimal-amd64-1"     #OS Image ID
 }
-
-

@@ -40,14 +40,14 @@ resource "ibm_is_security_group_rule" "allow_outbound" {
 ##########################################################
 
 resource "ibm_is_volume" "volumes" {
-    count = length(var.volumes)
-    name = "${var.name}-vol-${count.index}"
-    resource_group = var.resource_group_id
-    profile = var.volumes[count.index]["volume_profile"]
-    zone    = data.ibm_is_subnet.subnet.zone
-    capacity = var.volumes[count.index]["capacity"]
-    tags = var.tags
-    
+  count          = length(var.volumes)
+  name           = "${var.name}-vol-${count.index}"
+  resource_group = var.resource_group_id
+  profile        = var.volumes[count.index]["volume_profile"]
+  zone           = data.ibm_is_subnet.subnet.zone
+  capacity       = var.volumes[count.index]["capacity"]
+  tags           = var.tags
+
 }
 
 resource "ibm_is_instance" "vpcinstance" {
@@ -90,10 +90,10 @@ resource "ibm_is_instance" "vpcinstance" {
     size               = var.boot_volume_size
     tags               = var.tags
   }
-  
+
 
   volumes = length(var.volumes) > 0 ? [for vol in ibm_is_volume.volumes : vol.id] : null
-  tags = var.tags
+  tags    = var.tags
 
 }
 

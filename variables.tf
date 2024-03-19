@@ -25,6 +25,12 @@
 # See more:
 # https://cloud.ibm.com/docs/vpc?topic=vpc-profiles&interface=ui
 
+variable "profile_name" {
+  type        = string
+  description = "Instance profile for an Intel based Xeon Processor size and family to use for the instance"
+  default     = "bx3d-2x10"
+}
+
 ########################
 ####    Required    ####
 ########################
@@ -87,11 +93,6 @@ variable "init_script" {
   type        = string
   default     = ""
   description = "Script to run during the instance initialization. Defaults to an Ubuntu specific script when set to empty"
-}
-
-variable "profile_name" {
-  type        = string
-  description = "Instance profile for an Intel based Xeon Processor size and family to use for the instance"
 }
 
 variable "create_public_ip" {
@@ -196,7 +197,7 @@ variable "boot_volume_encryption" {
 }
 
 variable "volumes" {
-  default = []  
+  default = []
   type = list(object({
     volume_profile = string
     capacity       = number

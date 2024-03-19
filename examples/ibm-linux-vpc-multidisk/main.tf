@@ -21,7 +21,7 @@
 # gx2-8x64x1v100,gx2-16x128x2v100,gx2-32x256x2v100
 
 ## Links
-https://cloud.ibm.com/docs/vpc?topic=vpc-profiles&interface=ui
+# https://cloud.ibm.com/docs/vpc?topic=vpc-profiles&interface=ui
 
 ########################
 
@@ -34,18 +34,20 @@ https://cloud.ibm.com/docs/vpc?topic=vpc-profiles&interface=ui
 
 module "ibm_is_instance" {
   source            = "intel/ibm-vm/intel"
-  name              = "server01"                                    #The name you want to give the instance you are creating
-  profile_name      = "bx3d-2x10"                                     #Latest Intel Xeon processor available for the Instance Profile 
-  resource_group_id = "<YOUR ID HERE>"                              #Existing RG ID
-  vpc_id            = "<YOUR ID HERE>"                              #Existing VPC ID
-  subnet_id         = "<YOUR ID HERE>"                              #Existing Subnet ID
-  ssh_key_ids       = ["<YOUR ID HERE>"]                            #Existing SSH ID (seperate by commas if multiple)
-  allow_ssh_from    = "<YOUR IP HERE - example 53.3.58.49/32>"      #Security group inbound SSH CIDR Block (Adjust for your specific IP CIDR or IP that you want SSH access from)
-  image_name        = "ibm-ubuntu-22-04-2-minimal-amd64-1"          #OS Image ID
-  create_volume     = 2                                             #Enter how many additional disks you want to add to the instance
+  name              = "vm01"                                   #The name you want to give the instance you are creating
+  resource_group_id = "<YOUR ID HERE>"                         #Existing RG ID
+  vpc_id            = "<YOUR ID HERE>"                         #Existing VPC ID
+  subnet_id         = "<YOUR ID HERE>"                         #Existing Subnet ID
+  ssh_key_ids       = ["<YOUR ID HERE>"]                       #Security group inbound SSH CIDR Block (Adjust for your specific IP CIDR or IP that you want SSH access from)
+  allow_ssh_from    = "<YOUR IP HERE - example 53.3.58.49/32>" #Security group inbound SSH CIDR Block (Adjust for your specific IP CIDR or IP)
+  image_name        = "ibm-ubuntu-22-04-2-minimal-amd64-1"     #OS Image ID
+
+
+  # Example shows you how to add Additional Multi - Disk Volume to your IBM VM running on 4th Gen Xeon Scalable Processor by default  
+  create_volume = 2 #Enter how many additional disks you want to add to the instance
   volumes = [
     {
-      volume_profile = "5iops-tier"                                 #Choose "general-purpose", "5iops-tier", "10iops-tier", "custom" repeat for each number of create_volumes you entered above
+      volume_profile = "5iops-tier" #Choose "general-purpose", "5iops-tier", "10iops-tier", "custom" repeat for each number of create_volumes you entered above
       capacity       = 50
     },
     {
