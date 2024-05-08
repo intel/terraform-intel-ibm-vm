@@ -109,7 +109,6 @@ No modules.
 | [ibm_is_security_group.vpcinstance](https://registry.terraform.io/providers/IBM-cloud/ibm/latest/docs/resources/is_security_group) | resource |
 | [ibm_is_security_group_rule.additional_all_rules](https://registry.terraform.io/providers/IBM-cloud/ibm/latest/docs/resources/is_security_group_rule) | resource |
 | [ibm_is_security_group_rule.additional_icmp_rules](https://registry.terraform.io/providers/IBM-cloud/ibm/latest/docs/resources/is_security_group_rule) | resource |
-| [ibm_is_security_group_rule.additional_tcp_rules](https://registry.terraform.io/providers/IBM-cloud/ibm/latest/docs/resources/is_security_group_rule) | resource |
 | [ibm_is_security_group_rule.additional_udp_rules](https://registry.terraform.io/providers/IBM-cloud/ibm/latest/docs/resources/is_security_group_rule) | resource |
 | [ibm_is_security_group_rule.allow_outbound](https://registry.terraform.io/providers/IBM-cloud/ibm/latest/docs/resources/is_security_group_rule) | resource |
 | [ibm_is_security_group_rule.ssh_inbound](https://registry.terraform.io/providers/IBM-cloud/ibm/latest/docs/resources/is_security_group_rule) | resource |
