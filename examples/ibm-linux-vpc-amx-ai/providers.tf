@@ -3,5 +3,5 @@ provider "ibm" {
   # You will create an API key under the Manage Access(IAM) from the UI top menu. Create and download your API key from the "My IBM Cloud Api Key" Menu.
   # When you download the key you can edit the json file in a text editor and the api key will be listed in that file.
   # Example: 
-  ibmcloud_api_key = "A5cXu61A5f0ELjO9vgelryItu5Q1yrH5iVSa5k7--smt"
+  ibmcloud_api_key = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx-epsaJ3K"
 } 
