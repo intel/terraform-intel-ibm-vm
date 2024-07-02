@@ -135,21 +135,6 @@ resource "ibm_is_security_group_rule" "additional_all_rules" {
   ip_version = lookup(each.value, "ip_version", null)
 }
 
-resource "ibm_is_security_group_rule" "additional_tcp_rules" {
-  for_each = {
-    for rule in var.security_group_rules : rule.name => rule if lookup(rule, "tcp", null) != null
-  }
-  group      = ibm_is_security_group.vpcinstance.id
-  direction  = each.value.direction
-  remote     = each.value.remote
-  ip_version = lookup(each.value, "ip_version", null)
-
-  tcp {
-    port_min = each.value.tcp.port_min
-    port_max = each.value.tcp.port_max
-  }
-}
-
 resource "ibm_is_security_group_rule" "additional_udp_rules" {
   for_each = {
     for rule in var.security_group_rules : rule.name => rule if lookup(rule, "udp", null) != null
