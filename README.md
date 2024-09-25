@@ -142,7 +142,7 @@ No modules.
 | <a name="input_profile_name"></a> [profile\_name](#input\_profile\_name) | Instance profile for an Intel based Xeon Processor size and family to use for the instance | `string` | `"bx3d-2x10"` | no |
 | <a name="input_region"></a> [region](#input\_region) | The region where the resources will be created. | `string` | `"us-south"` | no |
 | <a name="input_resource_group_id"></a> [resource\_group\_id](#input\_resource\_group\_id) | ID of the resource group that has the VPC, SSH key, etc. | `string` | n/a | yes |
-| <a name="input_security_group_rules"></a> [security\_group\_rules](#input\_security\_group\_rules) | List of security group rules to set on the new security group created, in addition to the SSH rules | `list` | <pre>[<br>  {<br>    "direction": "outbound",<br>    "icmp": {<br>      "type": 8<br>    },<br>    "name": "icmp_outbound",<br>    "remote": "0.0.0.0/0"<br>  }<br>]</pre> | no |
+| <a name="input_security_group_rules"></a> [security\_group\_rules](#input\_security\_group\_rules) | List of security group rules to set on the new security group created, in addition to the SSH rules | `list` | <pre>[<br/>  {<br/>    "direction": "outbound",<br/>    "icmp": {<br/>      "type": 8<br/>    },<br/>    "name": "icmp_outbound",<br/>    "remote": "0.0.0.0/0"<br/>  }<br/>]</pre> | no |
 | <a name="input_ssh_key_ids"></a> [ssh\_key\_ids](#input\_ssh\_key\_ids) | List of SSH key IDs to inject into the instance.  This is not the public key guid itself, but just the key's IBM ID | `list(string)` | n/a | yes |
 | <a name="input_subnet_id"></a> [subnet\_id](#input\_subnet\_id) | ID of the subnet in the VPC where to create the instance | `string` | n/a | yes |
 | <a name="input_tags"></a> [tags](#input\_tags) | List of tags to add on all created resources | `list(string)` | `[]` | no |
@@ -150,7 +150,7 @@ No modules.
 | <a name="input_user_data"></a> [user\_data](#input\_user\_data) | User data to transfer to the instance. | `string` | `null` | no |
 | <a name="input_volume_name"></a> [volume\_name](#input\_volume\_name) | Name of the volume to create | `string` | `null` | no |
 | <a name="input_volume_profile"></a> [volume\_profile](#input\_volume\_profile) | Profile to use for the volume | `string` | `null` | no |
-| <a name="input_volumes"></a> [volumes](#input\_volumes) | n/a | <pre>list(object({<br>    volume_profile = string<br>    capacity       = number<br>  }))</pre> | `[]` | no |
+| <a name="input_volumes"></a> [volumes](#input\_volumes) | n/a | <pre>list(object({<br/>    volume_profile = string<br/>    capacity       = number<br/>  }))</pre> | `[]` | no |
 | <a name="input_vpc_id"></a> [vpc\_id](#input\_vpc\_id) | ID of the VPC where to create the instance | `string` | n/a | yes |
 
 ## Outputs
