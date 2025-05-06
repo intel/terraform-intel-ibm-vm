@@ -6,7 +6,7 @@
 
 # Intel® Optimized Cloud Modules for Terraform
 
-© Copyright 2024, Intel Corporation
+© Copyright 2025, Intel Corporation
 
 ## IBM VPC Compute Instance
 This module provides the functionality to ensure that you are utilizing Intel's latest generation processor in the creation of a virtual machine in IBM Cloud in a VPC.
@@ -173,4 +173,7 @@ No modules.
 | <a name="output_total_network_badwidth"></a> [total\_network\_badwidth](#output\_total\_network\_badwidth) | The amount of bandwidth (in megabits per second) allocated exclusively to instance network interfaces. |
 | <a name="output_vcpu"></a> [vcpu](#output\_vcpu) | The number of virtual CPUs assigned to the instance. |
 | <a name="output_volume_attachments"></a> [volume\_attachments](#output\_volume\_attachments) | A list of volume attachments for the instance. |
+
+## Links
+https://cloud.ibm.com/docs/vpc?topic=vpc-profiles&interface=ui
 <!-- END_TF_DOCS -->
